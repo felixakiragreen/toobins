@@ -3,8 +3,11 @@ pragma solidity ^0.8.0;
 
 import '@openzeppelin/contracts/token/ERC721/ERC721.sol';
 import '@openzeppelin/contracts/access/Ownable.sol';
+import '@openzeppelin/contracts/utils/Strings.sol';
 
 contract Toobins is Ownable, ERC721 {
+	using Strings for uint256;
+
 	constructor(
 		address _moonbirds,
 		string memory _baseTokenURI
@@ -47,7 +50,9 @@ contract Toobins is Ownable, ERC721 {
 
 	function tokenURI(
 		uint tokenId
-	) public view override returns (string memory) {}
+	) public view override returns (string memory) {
+		return string(abi.encodePacked(baseTokenURI, tokenId.toString()));
+	}
 
 	// MINT
 
