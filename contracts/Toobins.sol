@@ -12,4 +12,36 @@ contract Toobins is Ownable, ERC721 {
 
 	address public moonbirds;
 	uint public idTracker;
+
+	//
+	// ADMIN
+	//
+
+	function initiate(address luckyFirst) public onlyOwner {
+		require(_exists(0) == false, 'Toobins run has already started');
+
+		mint(luckyFirst);
+	}
+
+	// returns the 0riginal to the (contract) owner's wallet if it gets stuck
+	function yoink() public onlyOwner {
+		// get the address where the Toobin is
+		address from = ownerOf(0);
+		// return it to home base
+		_transfer(from, msg.sender, 0);
+
+		// leave behind the last Charm
+		// TODO: handle failures
+		mint(from);
+	}
+
+	function conclude() public onlyOwner {
+		yoink();
+	}
+
+	// VISUAL
+
+	function tokenURI(
+		uint tokenId
+	) public view override returns (string memory) {}
 }
