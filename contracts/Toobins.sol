@@ -62,4 +62,79 @@ contract Toobins is Ownable, ERC721 {
 
 		// TODO: check for Moonbird
 	}
+
+	// TRANSFER
+
+	// the primary transfer function
+	// (doesn't require `from` or `tokenId`)
+	function pass(address to) public {
+		transferOverride(msg.sender, to, 0);
+	}
+
+	// overriding ERC-721 transfer functions
+
+	function transferFrom(
+		address from,
+		address to,
+		uint tokenId
+	) public override {
+		transferOverride(from, to, tokenId);
+	}
+
+	function safeTransferFrom(
+		address from,
+		address to,
+		uint tokenId
+	) public override {
+		transferOverride(from, to, tokenId);
+	}
+
+	function safeTransferFrom(
+		address from,
+		address to,
+		uint tokenId,
+		bytes memory _data
+	) public override {
+		transferOverride(from, to, tokenId, _data);
+	}
+
+	// overriding with the following functions
+
+	function transferOverride(address from, address to, uint tokenId) internal {
+		transferOverride(from, to, tokenId, '');
+	}
+
+	// this function is where the "share-to-mint" magic happens
+	// first do the "transfer", then "mint" to the `from` address
+	function transferOverride(
+		address from,
+		address to,
+		uint tokenId,
+		bytes memory _data
+	) internal {
+		// do the transfer
+		transfer(from, to, tokenId, _data);
+		// do NOT mint when transferring from the (contract) owner
+		// (we don't want to leave a Hologram in the Worm's address)
+		if (from != owner()) {
+			mint(from);
+		}
+	}
+
+	function transfer(
+		address from,
+		address to,
+		uint tokenId,
+		bytes memory _data
+	) internal {
+		require(tokenId == 0, 'Charms are soulbound and cannot be transferred');
+
+		require(
+			// require standard authorization because we overrode safeTransferFrom
+			_isApprovedOrOwner(_msgSender(), tokenId),
+			'ERC721: transfer caller is not owner nor approved'
+		);
+
+		_safeTransfer(from, to, tokenId, _data);
+	}
 }
