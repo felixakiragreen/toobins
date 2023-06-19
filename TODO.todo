@@ -4,35 +4,28 @@ Scope of Work:
          [ ] base contract setup
             ERC721 (a? enumerable?)
          [ ] start Toobins run
-            owner mints Light & Dark Toobins to 2 wallets
+            owner mints Toobins to 1 wallets
          [ ] yoink
-            owner can yoink any Toobin
+            owner can yoink Toobin
          [ ] conclude Toobins run
-            yoink both Toobins to owner
+            yoink Toobins to owner
 
       Visual:
          [ ] metadata - base token URL
             URI
-         [ ] light & dark Toobins
-            Dark → 0
-            Light → 1
-         [ ] light & dark half Charms
-            Dark → Evens, 2, 4, 6...
-            Light → Odds, 3, 5, 7...
-         [ ] full charms
+         [ ] Toobins
+         [ ] Charms
 
       Mint:
          [ ] minting Toobins
-         [ ] minting light & dark Half Charm
-         [ ] update Half Charm to Full Charm
+         []  minting Charms
 
       Transfer:
          [ ] override transfers
          [ ] require a MythicEgg in the wallet
             except if owner
-         [ ] on transfer
-            [ ] if none, mint light or dark Half Charm
-            [ ] if half, update Half to Full
+         [ ] support delegate.cash for Moonbird check
+         [ ] on transfer, mint Charm
          [ ] make Charms soulbound
          [ ] prevent burning of Toobins?
             except if owner
