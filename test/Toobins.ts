@@ -9,6 +9,8 @@ const { constants, utils } = ethers
 const { parseEther, getAddress } = utils
 const { AddressZero } = constants
 
+const BASE_TOKEN_URI = 'https://metadata.proof.xyz/toobins/'
+
 describe('Toobins', () => {
 	let toobins: Toobins
 	let owner: SignerWithAddress
@@ -26,7 +28,7 @@ describe('Toobins', () => {
 		)) as Toobins__factory
 
 		// TODO: mock moonbirds contract and pass in address
-		toobins = await toobinsFactory.deploy(other1.address)
+		toobins = await toobinsFactory.deploy(other1.address, BASE_TOKEN_URI)
 		await toobins.deployed()
 	})
 
@@ -66,7 +68,13 @@ describe('Toobins', () => {
 		})
 	})
 
-	describe('VISUAL', async () => {})
+	describe('VISUAL', async () => {
+		it('should return the token URI for a token', async () => {
+			const tokenURI = await toobins.tokenURI(0)
+			// console.log(tokenURI)
+			expect(tokenURI).to.eq(`${BASE_TOKEN_URI}0`)
+		})
+	})
 
 	describe('MINT', async () => {})
 
