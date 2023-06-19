@@ -1,9 +1,9 @@
 Scope of Work:
    Contract:
       Admin: 
-         [ ] base contract setup
+         [x] base contract setup
             ERC721 (a? enumerable?)
-         [ ] start Toobins run
+         [x] start Toobins run
             owner mints Toobins to 1 wallets
          [ ] yoink
             owner can yoink Toobin
@@ -11,18 +11,17 @@ Scope of Work:
             yoink Toobins to owner
 
       Visual:
-         [ ] metadata - base token URL
-            URI
+         [ ] metadata - baseTokenURI
          [ ] Toobins
          [ ] Charms
 
       Mint:
-         [ ] minting Toobins
-         []  minting Charms
+         [x] minting Toobins
+         [ ] minting Charms
 
       Transfer:
-         [ ] override transfers
-         [ ] require a MythicEgg in the wallet
+         [x] override transfers
+         [ ] require a Moonbird in the wallet
             except if owner
          [ ] support delegate.cash for Moonbird check
          [ ] on transfer, mint Charm
@@ -31,7 +30,7 @@ Scope of Work:
             except if owner
 
    Testing:
-      [ ] Mock MythicEggs
+      [ ] Mock Moonbirds
       [ ] 100% test code coverage
          [ ] Admin
          [ ] Visual
