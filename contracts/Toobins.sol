@@ -5,13 +5,17 @@ import '@openzeppelin/contracts/token/ERC721/ERC721.sol';
 import '@openzeppelin/contracts/access/Ownable.sol';
 
 contract Toobins is Ownable, ERC721 {
-	constructor(address _moonbirds) ERC721('Toobins', 'TOOBIN') {
-		// TODO: pass in metadata URI
+	constructor(
+		address _moonbirds,
+		string memory _baseTokenURI
+	) ERC721('Toobins', 'TOOBIN') {
 		moonbirds = _moonbirds;
+		baseTokenURI = _baseTokenURI;
 	}
 
 	address public moonbirds;
 	uint public idTracker;
+	string baseTokenURI;
 
 	//
 	// ADMIN
