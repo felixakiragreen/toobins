@@ -1,7 +1,12 @@
 import { ethers } from 'hardhat'
 import chai from 'chai'
 
-import { Toobins, Toobins__factory } from '../typechain'
+import {
+	Toobins,
+	Toobins__factory,
+	MockMoonbirds,
+	MockMoonbirds__factory,
+} from '../typechain'
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers'
 
 const { expect } = chai
@@ -13,6 +18,7 @@ const BASE_TOKEN_URI = 'https://metadata.proof.xyz/toobins/'
 
 describe('Toobins', () => {
 	let toobins: Toobins
+	let moonbirds: MockMoonbirds
 	let owner: SignerWithAddress
 	let other1: SignerWithAddress
 	let other2: SignerWithAddress
@@ -21,14 +27,20 @@ describe('Toobins', () => {
 	before(async () => {
 		;[owner, other1, other2, ...others] = await ethers.getSigners()
 
+		// deploy Moonbirds contract
+		const moonbirdsFactory = (await ethers.getContractFactory(
+			'MockMoonbirds',
+			owner,
+		)) as MockMoonbirds__factory
+		moonbirds = await moonbirdsFactory.deploy()
+
 		// deploy Toobins contract AND pass in the address of the Edworm contract
 		const toobinsFactory = (await ethers.getContractFactory(
 			'Toobins',
 			owner,
 		)) as Toobins__factory
 
-		// TODO: mock moonbirds contract and pass in address
-		toobins = await toobinsFactory.deploy(other1.address, BASE_TOKEN_URI)
+		toobins = await toobinsFactory.deploy(moonbirds.address, BASE_TOKEN_URI)
 		await toobins.deployed()
 	})
 
