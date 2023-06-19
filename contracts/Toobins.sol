@@ -44,4 +44,22 @@ contract Toobins is Ownable, ERC721 {
 	function tokenURI(
 		uint tokenId
 	) public view override returns (string memory) {}
+
+	// MINT
+
+	function mint(address to) internal {
+		_safeMint(to, idTracker);
+
+		idTracker += 1;
+	}
+
+	function canTransfer(
+		address from,
+		address to,
+		uint tokenId
+	) public view returns (bool) {
+		return true;
+
+		// TODO: check for Moonbird
+	}
 }
