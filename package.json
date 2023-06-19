@@ -1,0 +1,40 @@
+{
+  "name": "toobins",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/felixakiragreen/toobins",
+  "bugs": {
+    "url": "https://github.com/felixakiragreen/toobins/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/felixakiragreen/toobins"
+  },
+  "license": "CC0-1.0",
+  "author": "Felix Green",
+  "scripts": {
+    "build": "pnpm clean && pnpm compile",
+    "clean": "hardhat clean",
+    "compile": "hardhat compile",
+    "coverage": "pnpm build && hardhat coverage",
+    "test": "hardhat test",
+    "node:dev": "hardhat node"
+  },
+  "devDependencies": {
+    "@ethersproject/abi": "^5.7.0",
+    "@ethersproject/providers": "^5.7.2",
+    "@nomicfoundation/hardhat-chai-matchers": "^1.0.6",
+    "@nomicfoundation/hardhat-network-helpers": "^1.0.8",
+    "@nomicfoundation/hardhat-toolbox": "^2.0.2",
+    "@nomiclabs/hardhat-ethers": "^2.2.3",
+    "@openzeppelin/contracts": "^4.8.3",
+    "dotenv": "^16.0.3",
+    "esbuild": "^0.17.18",
+    "esbuild-runner": "^2.2.2",
+    "ethers": "5.7.2",
+    "hardhat": "^2.14.0",
+    "prettier": "^2.8.8",
+    "prettier-plugin-solidity": "^1.1.3",
+    "typescript": "^5.0.4"
+  }
+}
