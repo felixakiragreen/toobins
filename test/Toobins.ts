@@ -48,7 +48,23 @@ describe('Toobins', () => {
 		})
 	})
 
-	describe('ADMIN', async () => {})
+	describe('ADMIN', async () => {
+		it('should prevents others from initiating the run', async () => {
+			await expect(
+				toobins.connect(other1).initiate(other1.address),
+			).to.be.revertedWith('Ownable: caller is not the owner')
+		})
+
+		it('should allow owner to initiate the run', async () => {
+			const balanceBefore = await toobins.balanceOf(other1.address)
+			expect(balanceBefore).to.eq(0)
+
+			await toobins.initiate(other1.address)
+
+			const balanceAfter = await toobins.balanceOf(other1.address)
+			expect(balanceAfter).to.eq(1)
+		})
+	})
 
 	describe('VISUAL', async () => {})
 
