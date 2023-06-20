@@ -121,13 +121,15 @@ describe('Toobins', () => {
 					AddressZero,
 					0,
 				),
-			).to.be.revertedWith('ERC721: balance query for the zero address')
+			).to.be.revertedWith('ERC721: address zero is not a valid owner')
 		})
 
 		it('should prevent transfers to addresses without a Moonbird', async () => {
 			await expect(
 				toobins.connect(other1).pass(other3.address),
-			).to.be.revertedWith('ERC721: balance query for the zero address')
+			).to.be.revertedWith(
+				'Toobins can only be transferred to an address with a  Moonbirds',
+			)
 		})
 	})
 })
