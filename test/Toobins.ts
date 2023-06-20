@@ -22,10 +22,20 @@ describe('Toobins', () => {
 	let owner: SignerWithAddress
 	let other1: SignerWithAddress
 	let other2: SignerWithAddress
+	let other3: SignerWithAddress
+	let other4: SignerWithAddress
 	let others: SignerWithAddress[]
 
 	before(async () => {
-		;[owner, other1, other2, ...others] = await ethers.getSigners()
+		;[
+			//
+			owner,
+			other1,
+			other2,
+			other3,
+			other4,
+			...others
+		] = await ethers.getSigners()
 
 		// deploy Moonbirds contract
 		const moonbirdsFactory = (await ethers.getContractFactory(
@@ -44,21 +54,33 @@ describe('Toobins', () => {
 		await toobins.deployed()
 	})
 
-	describe('deploying', async () => {
-		it('CAN deploy with correct address', async () => {
+	describe('DEPLOY', async () => {
+		it('should deploy with correct address', async () => {
 			expect(toobins.address).to.properAddress
 		})
 
-		it('HAS the correct owner', async () => {
+		it('should have the correct owner', async () => {
 			expect(await toobins.owner()).to.eq(owner.address)
 		})
 
 		// this is mostly a sanity check
-		it('HAS the correct name & symbol', async () => {
+		it('should have the correct name & symbol', async () => {
 			const name = await toobins.name()
 			const symbol = await toobins.symbol()
 			expect(name).to.eq('Toobins')
 			expect(symbol).to.eq('TOOBIN')
+		})
+
+		it('should mint some Moonbirds tokens', async () => {
+			const balanceBefore = await moonbirds.balanceOf(other1.address)
+			expect(balanceBefore).to.eq(0)
+
+			await moonbirds.connect(other1).mint()
+
+			const balanceAfter = await moonbirds.balanceOf(other1.address)
+			expect(balanceAfter).to.eq(1)
+
+			await moonbirds.connect(other2).mint()
 		})
 	})
 
