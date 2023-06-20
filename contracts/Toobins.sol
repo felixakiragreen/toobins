@@ -39,8 +39,7 @@ contract Toobins is Ownable, ERC721 {
 		_transfer(from, msg.sender, 0);
 
 		// leave behind the last Charm
-		// TODO: handle failures
-		mint(from);
+		internalMint(from);
 	}
 
 	function conclude() public onlyOwner {
@@ -62,7 +61,17 @@ contract Toobins is Ownable, ERC721 {
 
 	// MINT
 
-	function mint(address to) internal {
+	// This prevents Toobins from getting trapped
+	function internalMint(address to) internal {
+		try this.externalMint(to) {} catch {}
+	}
+
+	function externalMint(address to) external {
+		require(
+			_msgSender() == address(this),
+			'Must be called from within the contract'
+		);
+
 		_safeMint(to, idTracker);
 
 		idTracker += 1;
@@ -137,15 +146,16 @@ contract Toobins is Ownable, ERC721 {
 		bytes memory _data
 	) internal {
 		// do the transfer
-		transfer(from, to, tokenId, _data);
+		handleTransfer(from, to, tokenId, _data);
 		// do NOT mint when transferring from the (contract) owner
 		// (we don't want to leave a Hologram in the Worm's address)
 		if (from != owner()) {
+			try this.mint(from) {} catch {}
 			mint(from);
 		}
 	}
 
-	function transfer(
+	function handleTransfer(
 		address from,
 		address to,
 		uint tokenId,
