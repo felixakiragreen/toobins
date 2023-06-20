@@ -90,7 +90,7 @@ contract Toobins is Ownable, ERC721 {
 
 		require(
 			IERC721(moonbirds).balanceOf(to) > 0,
-			'Toobins can only be transferred to a Moonbirds holder'
+			'Toobins can only be transferred to an address with a  Moonbirds'
 		);
 
 		return true;
@@ -160,13 +160,7 @@ contract Toobins is Ownable, ERC721 {
 		uint tokenId,
 		bytes memory _data
 	) internal {
-		require(tokenId == 0, 'Charms are soulbound and cannot be transferred');
-
-		require(
-			// require standard authorization because we overrode safeTransferFrom
-			_isApprovedOrOwner(_msgSender(), tokenId),
-			'ERC721: transfer caller is not owner nor approved'
-		);
+		require(canTransfer(to, tokenId), 'Transfer not allowed');
 
 		_safeTransfer(from, to, tokenId, _data);
 	}
