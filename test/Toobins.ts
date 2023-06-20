@@ -86,6 +86,7 @@ describe('Toobins', () => {
 			expect(balanceAfter).to.eq(1)
 
 			await moonbirds.connect(other2).mint()
+			await moonbirds.connect(other3).mint()
 		})
 	})
 
@@ -134,7 +135,7 @@ describe('Toobins', () => {
 
 		it('should prevent transfers to addresses without a Moonbird', async () => {
 			await expect(
-				toobins.connect(other1).pass(other3.address),
+				toobins.connect(other1).pass(other4.address),
 			).to.be.revertedWith(
 				'Toobins can only be transferred to an address with a  Moonbirds',
 			)
@@ -159,6 +160,12 @@ describe('Toobins', () => {
 			await expect(
 				toobins.connect(other2).pass(other1.address),
 			).to.be.revertedWith('This address already receieved Toobin')
+		})
+
+		it('should prevents transfers of souldbound Charms', async () => {
+			await expect(
+				toobins.connect(other1).transferFrom(other2.address, other3.address, 1),
+			).to.be.revertedWith('Charms are soulbound and cannot be transferred')
 		})
 	})
 
