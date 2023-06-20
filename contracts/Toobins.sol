@@ -81,13 +81,13 @@ contract Toobins is Ownable, ERC721 {
 	function _requireCanTransfer(address to, uint tokenId) internal view {
 		require(_exists(0) == true, 'Toobins run has not yet started');
 
-		require(tokenId == 0, 'Charms are soulbound and cannot be transferred');
-
 		// TODO: add support for delegate cash
 		require(
 			_isApprovedOrOwner(_msgSender(), tokenId),
 			'ERC721: transfer caller is not owner nor approved'
 		);
+
+		require(tokenId == 0, 'Charms are soulbound and cannot be transferred');
 
 		require(
 			IERC721(moonbirds).balanceOf(to) > 0,
