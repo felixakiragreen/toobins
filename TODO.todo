@@ -21,13 +21,13 @@ Scope of Work:
 
       Transfer:
          [x] override transfers
-         [ ] require a Moonbird in the wallet
-            except if owner
+         [x] require a Moonbird in the wallet
+            [ ] except if owner
          [ ] support delegate.cash for Moonbird check
          [ ] on transfer, mint Charm
          [ ] make Charms soulbound
          [ ] prevent burning of Toobins?
-            except if owner
+            [ ] except if owner
 
    Testing:
       [ ] Mock Moonbirds
