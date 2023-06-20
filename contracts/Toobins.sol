@@ -55,7 +55,8 @@ contract Toobins is Ownable, ERC721 {
 	function tokenURI(
 		uint tokenId
 	) public view override returns (string memory) {
-		// TODO: check for token exists
+		_requireMinted(tokenId);
+
 		return string(abi.encodePacked(baseTokenURI, tokenId.toString()));
 	}
 
@@ -77,7 +78,7 @@ contract Toobins is Ownable, ERC721 {
 		idTracker += 1;
 	}
 
-	function canTransfer(address to, uint tokenId) public view returns (bool) {
+	function _requireCanTransfer(address to, uint tokenId) internal view {
 		require(_exists(0) == true, 'Toobins run has not yet started');
 
 		require(tokenId == 0, 'Charms are soulbound and cannot be transferred');
@@ -94,6 +95,10 @@ contract Toobins is Ownable, ERC721 {
 		);
 
 		require(balanceOf(to) == 0, 'This address already receieved Toobin');
+	}
+
+	function canTransfer(address to, uint tokenId) public view returns (bool) {
+		_requireCanTransfer(to, tokenId);
 
 		return true;
 	}
@@ -162,7 +167,7 @@ contract Toobins is Ownable, ERC721 {
 		uint tokenId,
 		bytes memory _data
 	) internal {
-		require(canTransfer(to, tokenId), 'Transfer not allowed');
+		_requireCanTransfer(to, tokenId);
 
 		_safeTransfer(from, to, tokenId, _data);
 	}
