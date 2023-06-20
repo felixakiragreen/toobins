@@ -2,6 +2,7 @@
 pragma solidity ^0.8.18;
 
 import '@openzeppelin/contracts/token/ERC721/ERC721.sol';
+import '@openzeppelin/contracts/token/ERC721/IERC721.sol';
 import '@openzeppelin/contracts/access/Ownable.sol';
 import '@openzeppelin/contracts/utils/Strings.sol';
 
@@ -67,14 +68,23 @@ contract Toobins is Ownable, ERC721 {
 		idTracker += 1;
 	}
 
-	function canTransfer(
-		address from,
-		address to,
-		uint tokenId
-	) public view returns (bool) {
-		return true;
+	function canTransfer(address to, uint tokenId) public view returns (bool) {
+		require(_exists(0) == true, 'Toobins run has not yet started');
 
-		// TODO: check for Moonbird
+		require(tokenId == 0, 'Charms are soulbound and cannot be transferred');
+
+		// TODO: add support for delegate cash
+		require(
+			_isApprovedOrOwner(_msgSender(), tokenId),
+			'ERC721: transfer caller is not owner nor approved'
+		);
+
+		require(
+			IERC721(moonbirds).balanceOf(to) > 0,
+			'Toobins can only be transferred to a Moonbirds holder'
+		);
+
+		return true;
 	}
 
 	// TRANSFER
