@@ -131,5 +131,22 @@ describe('Toobins', () => {
 				'Toobins can only be transferred to an address with a  Moonbirds',
 			)
 		})
+
+		it('should transfer the Toobin to a valid address', async () => {
+			const o1_balanceBefore = await toobins.balanceOf(other1.address)
+			expect(o1_balanceBefore).to.eq(1)
+			const o2_balanceBefore = await toobins.balanceOf(other2.address)
+			expect(o2_balanceBefore).to.eq(0)
+
+			await toobins.connect(other1).pass(other2.address)
+
+			const o1_balanceAfter = await toobins.balanceOf(other1.address)
+			expect(o1_balanceAfter).to.eq(1)
+
+			const o2_balanceAfter = await toobins.balanceOf(other2.address)
+			expect(o2_balanceAfter).to.eq(1)
+		})
+
+		it('should prevent transfers to addresses that already have a Toobin', async () => {})
 	})
 })
