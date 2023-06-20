@@ -1,10 +1,16 @@
 // SPDX-License-Identifier: CC0-1.0
 pragma solidity ^0.8.18;
 
-contract MockMoonbirds {
-	constructor() {}
+import '@openzeppelin/contracts/token/ERC721/ERC721.sol';
 
-	function balanceOf(address owner) public view returns (uint balance) {
-		return 1;
+contract MockMoonbirds is ERC721 {
+	constructor() ERC721('Moonbirds', 'M') {}
+
+	uint public idTracker;
+
+	function mint() public {
+		_safeMint(msg.sender, idTracker);
+
+		idTracker++;
 	}
 }
