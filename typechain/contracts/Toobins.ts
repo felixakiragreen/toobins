@@ -31,6 +31,7 @@ export interface ToobinsInterface extends utils.Interface {
   functions: {
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
+    "baseTokenURI()": FunctionFragment;
     "canTransfer(address,uint256)": FunctionFragment;
     "conclude()": FunctionFragment;
     "externalMint(address)": FunctionFragment;
@@ -60,6 +61,7 @@ export interface ToobinsInterface extends utils.Interface {
     nameOrSignatureOrTopic:
       | "approve"
       | "balanceOf"
+      | "baseTokenURI"
       | "canTransfer"
       | "conclude"
       | "externalMint"
@@ -92,6 +94,10 @@ export interface ToobinsInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "balanceOf",
     values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "baseTokenURI",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "canTransfer",
@@ -180,6 +186,10 @@ export interface ToobinsInterface extends utils.Interface {
 
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "baseTokenURI",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "canTransfer",
     data: BytesLike
@@ -339,6 +349,8 @@ export interface Toobins extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
+    baseTokenURI(overrides?: CallOverrides): Promise<[string]>;
+
     canTransfer(
       to: PromiseOrValue<string>,
       tokenId: PromiseOrValue<BigNumberish>,
@@ -458,6 +470,8 @@ export interface Toobins extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
+  baseTokenURI(overrides?: CallOverrides): Promise<string>;
+
   canTransfer(
     to: PromiseOrValue<string>,
     tokenId: PromiseOrValue<BigNumberish>,
@@ -576,6 +590,8 @@ export interface Toobins extends BaseContract {
       owner: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    baseTokenURI(overrides?: CallOverrides): Promise<string>;
 
     canTransfer(
       to: PromiseOrValue<string>,
@@ -732,6 +748,8 @@ export interface Toobins extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    baseTokenURI(overrides?: CallOverrides): Promise<BigNumber>;
+
     canTransfer(
       to: PromiseOrValue<string>,
       tokenId: PromiseOrValue<BigNumberish>,
@@ -851,6 +869,8 @@ export interface Toobins extends BaseContract {
       owner: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
+
+    baseTokenURI(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     canTransfer(
       to: PromiseOrValue<string>,
