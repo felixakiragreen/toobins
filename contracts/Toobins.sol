@@ -148,10 +148,9 @@ contract Toobins is Ownable, ERC721 {
 		// do the transfer
 		handleTransfer(from, to, tokenId, _data);
 		// do NOT mint when transferring from the (contract) owner
-		// (we don't want to leave a Hologram in the Worm's address)
+		// (we don't want to leave a Charm in the Owner's address)
 		if (from != owner()) {
-			try this.mint(from) {} catch {}
-			mint(from);
+			internalMint(from);
 		}
 	}
 
