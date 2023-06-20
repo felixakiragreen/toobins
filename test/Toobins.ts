@@ -112,5 +112,22 @@ describe('Toobins', () => {
 
 	describe('MINT', async () => {})
 
-	describe('TRANSFER', async () => {})
+	describe('TRANSFER', async () => {
+		it('should prevent transfers to the zero address', async () => {
+			await expect(
+				toobins.connect(other1).transferFrom(
+					//
+					other1.address,
+					AddressZero,
+					0,
+				),
+			).to.be.revertedWith('ERC721: balance query for the zero address')
+		})
+
+		it('should prevent transfers to addresses without a Moonbird', async () => {
+			await expect(
+				toobins.connect(other1).pass(other3.address),
+			).to.be.revertedWith('ERC721: balance query for the zero address')
+		})
+	})
 })
