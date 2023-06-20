@@ -7,11 +7,11 @@ Scope of Work:
             owner mints Toobins to 1 wallets
          [ ] yoink
             owner can yoink Toobin
-         [ ] conclude Toobins run
+         [x] conclude Toobins run
             yoink Toobins to owner
 
       Visual:
-         [ ] metadata - baseTokenURI
+         [x] metadata - baseTokenURI
          [ ] Toobins
          [ ] Charms
 
@@ -25,12 +25,12 @@ Scope of Work:
             [ ] except if owner
          [ ] support delegate.cash for Moonbird check
          [ ] on transfer, mint Charm
-         [ ] make Charms soulbound
+         [x] make Charms soulbound
          [ ] prevent burning of Toobins?
             [ ] except if owner
 
    Testing:
-      [ ] Mock Moonbirds
+      [x] Mock Moonbirds
       [ ] 100% test code coverage
          [ ] Admin
          [ ] Visual
