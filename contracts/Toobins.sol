@@ -28,7 +28,7 @@ contract Toobins is Ownable, ERC721 {
 	function initiate(address luckyFirst) public onlyOwner {
 		require(_exists(0) == false, 'Toobins run has already started');
 
-		mint(luckyFirst);
+		internalMint(luckyFirst);
 	}
 
 	// returns the 0riginal to the (contract) owner's wallet if it gets stuck
