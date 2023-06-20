@@ -110,8 +110,13 @@ describe('Toobins', () => {
 	describe('VISUAL', async () => {
 		it('should return the token URI for a token', async () => {
 			const tokenURI = await toobins.tokenURI(0)
-			// console.log(tokenURI)
 			expect(tokenURI).to.eq(`${BASE_TOKEN_URI}0`)
+		})
+
+		it('should not return token URI for an invalid token', async () => {
+			await expect(toobins.tokenURI(999)).to.be.revertedWith(
+				'ERC721: invalid token ID',
+			)
 		})
 	})
 
