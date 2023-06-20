@@ -147,6 +147,10 @@ describe('Toobins', () => {
 			expect(o2_balanceAfter).to.eq(1)
 		})
 
-		it('should prevent transfers to addresses that already have a Toobin', async () => {})
+		it('should prevent transfers to addresses that already had the Toobin', async () => {
+			await expect(
+				toobins.connect(other2).pass(other1.address),
+			).to.be.revertedWith('This address already receieved Toobin')
+		})
 	})
 })
