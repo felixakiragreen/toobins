@@ -50,7 +50,7 @@ describe('Toobins', () => {
 			owner,
 		)) as Toobins__factory
 
-		toobins = await toobinsFactory.deploy(moonbirds.address, BASE_TOKEN_URI)
+		toobins = await toobinsFactory.deploy(moonbirds.address, '')
 		await toobins.deployed()
 	})
 
@@ -69,6 +69,11 @@ describe('Toobins', () => {
 			const symbol = await toobins.symbol()
 			expect(name).to.eq('Toobins')
 			expect(symbol).to.eq('TOOBIN')
+		})
+
+		it('should let the owner update the baseTokenURI', async () => {
+			await toobins.setBaseTokenURI(BASE_TOKEN_URI)
+			expect(await toobins.baseTokenURI()).to.eq(BASE_TOKEN_URI)
 		})
 
 		it('should mint some Moonbirds tokens', async () => {
@@ -109,8 +114,6 @@ describe('Toobins', () => {
 			expect(tokenURI).to.eq(`${BASE_TOKEN_URI}0`)
 		})
 	})
-
-	describe('MINT', async () => {})
 
 	describe('TRANSFER', async () => {
 		it('should prevent transfers to the zero address', async () => {
