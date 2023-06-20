@@ -19,7 +19,7 @@ contract Toobins is Ownable, ERC721 {
 
 	address public moonbirds;
 	uint public idTracker;
-	string baseTokenURI;
+	string public baseTokenURI;
 
 	//
 	// ADMIN
