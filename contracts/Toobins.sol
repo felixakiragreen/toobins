@@ -46,6 +46,10 @@ contract Toobins is Ownable, ERC721 {
 		yoink();
 	}
 
+	function setBaseTokenURI(string memory _baseTokenURI) public onlyOwner {
+		baseTokenURI = _baseTokenURI;
+	}
+
 	// VISUAL
 
 	function tokenURI(
