@@ -93,6 +93,8 @@ contract Toobins is Ownable, ERC721 {
 			'Toobins can only be transferred to an address with a  Moonbirds'
 		);
 
+		require(balanceOf(to) == 0, 'This address already receieved Toobin');
+
 		return true;
 	}
 
