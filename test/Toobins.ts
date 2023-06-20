@@ -153,4 +153,16 @@ describe('Toobins', () => {
 			).to.be.revertedWith('This address already receieved Toobin')
 		})
 	})
+
+	describe('ADMIN', async () => {
+		it('should allow the owner to conclude the run', async () => {
+			const balanceBefore = await toobins.balanceOf(owner.address)
+			expect(balanceBefore).to.eq(0)
+
+			await toobins.conclude()
+
+			const balanceAfter = await toobins.balanceOf(owner.address)
+			expect(balanceAfter).to.eq(1)
+		})
+	})
 })
