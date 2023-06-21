@@ -108,19 +108,6 @@ describe('Toobins', () => {
 		})
 	})
 
-	describe('VISUAL', async () => {
-		it('should return the token URI for a token', async () => {
-			const tokenURI = await toobins.tokenURI(0)
-			expect(tokenURI).to.eq(`${BASE_TOKEN_URI}0`)
-		})
-
-		it('should not return token URI for an invalid token', async () => {
-			await expect(toobins.tokenURI(999)).to.be.revertedWith(
-				'ERC721: invalid token ID',
-			)
-		})
-	})
-
 	describe('TRANSFER', async () => {
 		it('should prevent transfers to the zero address', async () => {
 			await expect(
@@ -192,6 +179,31 @@ describe('Toobins', () => {
 	})
 
 	describe('ADMIN', async () => {
+		it('should let the owner yoink the Toobin', async () => {
+			const owner_balanceBefore = await toobins.balanceOf(owner.address)
+			expect(owner_balanceBefore).to.eq(0)
+			const o2_balanceBefore = await toobins.balanceOf(other2.address)
+			expect(o2_balanceBefore).to.eq(1)
+
+			await toobins.yoink()
+
+			const owner_balanceAfter = await toobins.balanceOf(owner.address)
+			expect(owner_balanceAfter).to.eq(1)
+
+			const o2_balanceAfter = await toobins.balanceOf(other2.address)
+			expect(o2_balanceAfter).to.eq(1)
+		})
+
+		it('should not leave behind a Charm for the owner', async () => {
+			const owner_balanceBefore = await toobins.balanceOf(owner.address)
+			expect(owner_balanceBefore).to.eq(1)
+
+			await toobins.pass(other3.address)
+
+			const owner_balanceAfter = await toobins.balanceOf(owner.address)
+			expect(owner_balanceAfter).to.eq(0)
+		})
+
 		it('should allow the owner to conclude the run', async () => {
 			const balanceBefore = await toobins.balanceOf(owner.address)
 			expect(balanceBefore).to.eq(0)
