@@ -178,6 +178,22 @@ describe('Toobins', () => {
 		})
 	})
 
+	describe('VISUAL', async () => {
+		it('should return the token URI for a token', async () => {
+			const tokenURI_0 = await toobins.tokenURI(0)
+			expect(tokenURI_0).to.eq(`${BASE_TOKEN_URI}0`)
+
+			const tokenURI_1 = await toobins.tokenURI(1)
+			expect(tokenURI_1).to.eq(`${BASE_TOKEN_URI}1`)
+		})
+
+		it('should not return token URI for an invalid token', async () => {
+			await expect(toobins.tokenURI(999)).to.be.revertedWith(
+				'ERC721: invalid token ID',
+			)
+		})
+	})
+
 	describe('ADMIN', async () => {
 		it('should let the owner yoink the Toobin', async () => {
 			const owner_balanceBefore = await toobins.balanceOf(owner.address)
