@@ -5,19 +5,19 @@ Scope of Work:
             ERC721 (a? enumerable?)
          [x] start Toobins run
             owner mints Toobins to 1 wallets
-         [ ] yoink
+         [x] yoink
             owner can yoink Toobin
          [x] conclude Toobins run
             yoink Toobins to owner
 
       Visual:
          [x] metadata - baseTokenURI
-         [ ] Toobins
-         [ ] Charms
+         [x] Toobins
+         [x] Charms
 
       Mint:
          [x] minting Toobins
-         [ ] minting Charms
+         [x] minting Charms
 
       Transfer:
          [x] override transfers
