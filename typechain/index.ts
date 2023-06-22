@@ -20,6 +20,8 @@ export type { ERC165 } from "./@openzeppelin/contracts/utils/introspection/ERC16
 export { ERC165__factory } from "./factories/@openzeppelin/contracts/utils/introspection/ERC165__factory";
 export type { IERC165 } from "./@openzeppelin/contracts/utils/introspection/IERC165";
 export { IERC165__factory } from "./factories/@openzeppelin/contracts/utils/introspection/IERC165__factory";
+export type { IDelegationRegistry } from "./contracts/IDelegationRegistry";
+export { IDelegationRegistry__factory } from "./factories/contracts/IDelegationRegistry__factory";
 export type { MockMoonbirds } from "./contracts/MockMoonbirds";
 export { MockMoonbirds__factory } from "./factories/contracts/MockMoonbirds__factory";
 export type { Toobins } from "./contracts/Toobins";
