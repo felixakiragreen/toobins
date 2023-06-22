@@ -6,6 +6,7 @@ import '@openzeppelin/contracts/token/ERC721/IERC721.sol';
 import '@openzeppelin/contracts/access/Ownable.sol';
 import '@openzeppelin/contracts/utils/Strings.sol';
 import './IDelegationRegistry.sol';
+import 'hardhat/console.sol';
 
 contract Toobins is Ownable, ERC721 {
 	using Strings for uint256;
@@ -104,37 +105,6 @@ contract Toobins is Ownable, ERC721 {
 		transferOverride(vault, to, 0);
 	}
 
-	//    function mintForInvisibleFriends(
-	//     uint256[] calldata originalIds
-	//   )
-	//     external
-	//     payable
-	//     verifySaleState(SaleState.Private)
-	//     verifyTokenBasedMintEnabled
-	//     verifyAmount(originalIds.length)
-	//     verifyAvailableSupply(originalIds.length)
-	//   {
-	//     _checkOwnershipAndMarkIDsMinted(originalIds, _msgSender());
-	//     _mint(_msgSender(), originalIds.length);
-	//   }
-
-	//   function delegatedMintForInvisibleFriends(
-	//     address vault,
-	//     uint256[] calldata originalIds
-	//   )
-	//     external
-	//     payable
-	//     verifySaleState(SaleState.Private)
-	//     verifyTokenBasedMintEnabled
-	//     verifyAmount(originalIds.length)
-	//     verifyAvailableSupply(originalIds.length)
-	//   {
-	//     if (!delegationRegistry.checkDelegateForContract(_msgSender(), vault, address(this))) revert NotDelegatedError();
-
-	//     _checkOwnershipAndMarkIDsMinted(originalIds, vault);
-	//     _mint(_msgSender(), originalIds.length);
-	//   }
-
 	// overriding ERC-721 transfer functions
 
 	function transferFrom(
@@ -227,6 +197,8 @@ contract Toobins is Ownable, ERC721 {
 		uint tokenId
 	) internal view {
 		// owner doesn't need special checks
+		bool isOwner = to == owner();
+		console.log('isOwner', isOwner);
 		if (to == owner()) {
 			return;
 		}
@@ -239,19 +211,21 @@ contract Toobins is Ownable, ERC721 {
 
 		// check if they have a moonbird
 		bool toHasMoonbird = hasMoonbird(to);
+		console.log('toHasMoonbird', toHasMoonbird);
 		if (toHasMoonbird) {
 			return;
 		}
 
 		// check if they have a delegated vault with a moonbird
 		bool toDelegateHasMoonbird = delegateHasMoonbird(to);
+		console.log('toDelegateHasMoonbird', toDelegateHasMoonbird);
 		if (toDelegateHasMoonbird) {
 			return;
 		}
 
 		require(
 			toHasMoonbird,
-			'Toobins can only be transferred to an address with a Moonbirds'
+			'Toobins can only be transferred to an address with a Moonbird'
 		);
 	}
 
@@ -260,6 +234,8 @@ contract Toobins is Ownable, ERC721 {
 	}
 
 	function delegateHasMoonbird(address delegate) internal view returns (bool) {
+		address vault = checkForMoonbirdsVault(delegate);
+		console.log('delegate vault', vault);
 		return checkForMoonbirdsVault(delegate) != address(0);
 	}
 
@@ -267,9 +243,8 @@ contract Toobins is Ownable, ERC721 {
 		address delegate
 	) internal view returns (address) {
 		IDelegationRegistry.DelegationInfo[]
-			memory delegateInfos = delegationRegistry.getDelegationsByDelegate(
-				delegate
-			);
+			memory delegateInfos = IDelegationRegistry(delegationRegistry)
+				.getDelegationsByDelegate(delegate);
 
 		for (uint i = 0; i < delegateInfos.length; i++) {
 			IDelegationRegistry.DelegationInfo memory info = delegateInfos[i];
@@ -280,5 +255,16 @@ contract Toobins is Ownable, ERC721 {
 		}
 
 		return address(0);
+	}
+
+	function getDelegates(
+		address delegate
+	) public view returns (IDelegationRegistry.DelegationInfo[] memory) {
+		IDelegationRegistry.DelegationInfo[]
+			memory delegateInfos = delegationRegistry.getDelegationsByDelegate(
+				delegate
+			);
+
+		return delegateInfos;
 	}
 }
