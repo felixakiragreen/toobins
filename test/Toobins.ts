@@ -15,6 +15,7 @@ const { parseEther, getAddress } = utils
 const { AddressZero } = constants
 
 const BASE_TOKEN_URI = 'https://metadata.proof.xyz/toobins/'
+const DELEGATION_REGISTRY = '0x00000000000076A84feF008CDAbe6409d2FE638B'
 
 describe('Toobins', () => {
 	let toobins: Toobins
@@ -50,7 +51,11 @@ describe('Toobins', () => {
 			owner,
 		)) as Toobins__factory
 
-		toobins = await toobinsFactory.deploy(moonbirds.address, '')
+		toobins = await toobinsFactory.deploy(
+			moonbirds.address,
+			'',
+			DELEGATION_REGISTRY,
+		)
 		await toobins.deployed()
 	})
 
@@ -68,7 +73,7 @@ describe('Toobins', () => {
 			const name = await toobins.name()
 			const symbol = await toobins.symbol()
 			expect(name).to.eq('Toobins')
-			expect(symbol).to.eq('TOOBIN')
+			expect(symbol).to.eq('TOOBINS')
 		})
 
 		it('should let the owner update the baseTokenURI', async () => {
