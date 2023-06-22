@@ -21,6 +21,7 @@
 		"node:dev": "hardhat node"
 	},
 	"devDependencies": {
+		"@defi-wonderland/smock": "^2.3.4",
 		"@ethersproject/abi": "^5.7.0",
 		"@ethersproject/providers": "^5.7.2",
 		"@nomicfoundation/hardhat-chai-matchers": "^1.0.6",
