@@ -5,21 +5,25 @@ import '@openzeppelin/contracts/token/ERC721/ERC721.sol';
 import '@openzeppelin/contracts/token/ERC721/IERC721.sol';
 import '@openzeppelin/contracts/access/Ownable.sol';
 import '@openzeppelin/contracts/utils/Strings.sol';
+import "./IDelegationRegistry.sol";
 
 contract Toobins is Ownable, ERC721 {
 	using Strings for uint256;
 
 	constructor(
 		address _moonbirds,
-		string memory _baseTokenURI
+		string memory _baseTokenURI,
+      address _delegationRegistry,
 	) ERC721('Toobins', 'TOOBIN') {
 		moonbirds = _moonbirds;
 		baseTokenURI = _baseTokenURI;
+      delegationRegistry = IDelegationRegistry(_delegationRegistry);
 	}
 
 	address public moonbirds;
 	uint public idTracker;
 	string public baseTokenURI;
+   IDelegationRegistry public delegationRegistry;
 
 	//
 	// ADMIN
@@ -110,6 +114,44 @@ contract Toobins is Ownable, ERC721 {
 	function pass(address to) public {
 		transferOverride(msg.sender, to, 0);
 	}
+
+   function delegatedPass(address vault, address to) public {
+    if (!delegationRegistry.checkDelegateForContract(_msgSender(), vault, address(this))) revert NotDelegatedError();
+
+      //
+    transferOverride(vault, to, 0);
+   }
+
+//    function mintForInvisibleFriends(
+//     uint256[] calldata originalIds
+//   )
+//     external
+//     payable
+//     verifySaleState(SaleState.Private)
+//     verifyTokenBasedMintEnabled
+//     verifyAmount(originalIds.length)
+//     verifyAvailableSupply(originalIds.length)
+//   {
+//     _checkOwnershipAndMarkIDsMinted(originalIds, _msgSender());
+//     _mint(_msgSender(), originalIds.length);
+//   }
+
+//   function delegatedMintForInvisibleFriends(
+//     address vault,
+//     uint256[] calldata originalIds
+//   )
+//     external
+//     payable
+//     verifySaleState(SaleState.Private)
+//     verifyTokenBasedMintEnabled
+//     verifyAmount(originalIds.length)
+//     verifyAvailableSupply(originalIds.length)
+//   {
+//     if (!delegationRegistry.checkDelegateForContract(_msgSender(), vault, address(this))) revert NotDelegatedError();
+
+//     _checkOwnershipAndMarkIDsMinted(originalIds, vault);
+//     _mint(_msgSender(), originalIds.length);
+//   }
 
 	// overriding ERC-721 transfer functions
 
