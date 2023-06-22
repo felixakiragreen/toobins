@@ -6,13 +6,25 @@ import {
 	Toobins__factory,
 	MockMoonbirds,
 	MockMoonbirds__factory,
+	IDelegationRegistry,
 } from '../typechain'
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers'
+import {
+	impersonateAccount,
+	stopImpersonatingAccount,
+	setBalance,
+} from '@nomicfoundation/hardhat-network-helpers'
+
+import { FakeContract, smock } from '@defi-wonderland/smock'
+import { BigNumber } from 'ethers'
 
 const { expect } = chai
 const { constants, utils } = ethers
 const { parseEther, getAddress } = utils
 const { AddressZero } = constants
+
+chai.should() // if you like should syntax
+chai.use(smock.matchers)
 
 const BASE_TOKEN_URI = 'https://metadata.proof.xyz/toobins/'
 const DELEGATION_REGISTRY = '0x00000000000076A84feF008CDAbe6409d2FE638B'
@@ -20,11 +32,14 @@ const DELEGATION_REGISTRY = '0x00000000000076A84feF008CDAbe6409d2FE638B'
 describe('Toobins', () => {
 	let toobins: Toobins
 	let moonbirds: MockMoonbirds
+	let fakeDelegationRegistry: FakeContract<IDelegationRegistry>
 	let owner: SignerWithAddress
 	let other1: SignerWithAddress
 	let other2: SignerWithAddress
 	let other3: SignerWithAddress
 	let other4: SignerWithAddress
+	let otherDeleHot: SignerWithAddress
+	let otherDeleCold: SignerWithAddress
 	let others: SignerWithAddress[]
 
 	before(async () => {
@@ -35,8 +50,15 @@ describe('Toobins', () => {
 			other2,
 			other3,
 			other4,
+			otherDeleHot,
+			otherDeleCold,
 			...others
 		] = await ethers.getSigners()
+
+		// deploy fake DelegationRegistry
+		fakeDelegationRegistry = await smock.fake<IDelegationRegistry>(
+			'IDelegationRegistry',
+		)
 
 		// deploy Moonbirds contract
 		const moonbirdsFactory = (await ethers.getContractFactory(
@@ -54,7 +76,7 @@ describe('Toobins', () => {
 		toobins = await toobinsFactory.deploy(
 			moonbirds.address,
 			'',
-			DELEGATION_REGISTRY,
+			fakeDelegationRegistry.address,
 		)
 		await toobins.deployed()
 	})
@@ -82,16 +104,19 @@ describe('Toobins', () => {
 		})
 
 		it('should mint some Moonbirds tokens', async () => {
-			const balanceBefore = await moonbirds.balanceOf(other1.address)
-			expect(balanceBefore).to.eq(0)
+			expect(await moonbirds.balanceOf(other1.address)).to.eq(0)
 
 			await moonbirds.connect(other1).mint()
-
-			const balanceAfter = await moonbirds.balanceOf(other1.address)
-			expect(balanceAfter).to.eq(1)
-
 			await moonbirds.connect(other2).mint()
 			await moonbirds.connect(other3).mint()
+			// await moonbirds.connect(otherDeleCold).mint()
+
+			expect(await moonbirds.balanceOf(other1.address)).to.eq(1)
+			expect(await moonbirds.balanceOf(other2.address)).to.eq(1)
+			expect(await moonbirds.balanceOf(other3.address)).to.eq(1)
+			expect(await moonbirds.balanceOf(other4.address)).to.eq(0)
+			// expect(await moonbirds.balanceOf(otherDeleCold.address)).to.eq(1)
+			expect(await moonbirds.balanceOf(otherDeleHot.address)).to.eq(0)
 		})
 	})
 
@@ -130,16 +155,37 @@ describe('Toobins', () => {
 		})
 
 		it('should prevent transfers to addresses without a Moonbird', async () => {
+			fakeDelegationRegistry.getDelegationsByDelegate.returns([
+				[
+					1,
+					// '0x588672a61Fb89f2dcD9a70001F06E8B692567755',
+					otherDeleCold.address,
+					// '0xBA19BA5233b49794c33f01654e99A60E579E6f29',
+					otherDeleHot.address,
+					'0x0000000000000000000000000000000000000000',
+					BigNumber.from(0),
+				],
+			] as IDelegationRegistry.DelegationInfoStructOutput[])
+
+			// fakeDelegationRegistry.getDelegationsByDelegate.returns([])
+			// fakeDelegationRegistry.checkDelegateForAll.returns(true)
+
+			console.log('inside here')
+
+			const testMockDelegates = await toobins.getDelegates(other4.address)
+
+			console.log('testMockDelegates', testMockDelegates)
+
 			await expect(
 				toobins.connect(other1).pass(other4.address),
 			).to.be.revertedWith(
-				'Toobins can only be transferred to an address with a  Moonbirds',
+				'Toobins can only be transferred to an address with a Moonbird',
 			)
 
 			await expect(
 				toobins.connect(other1).canTransfer(other4.address, 0),
 			).to.be.revertedWith(
-				'Toobins can only be transferred to an address with a  Moonbirds',
+				'Toobins can only be transferred to an address with a Moonbird',
 			)
 		})
 
@@ -165,11 +211,11 @@ describe('Toobins', () => {
 		it('should prevent transfers to addresses that already had the Toobin', async () => {
 			await expect(
 				toobins.connect(other2).pass(other1.address),
-			).to.be.revertedWith('This address already receieved Toobin')
+			).to.be.revertedWith('This address already receieved Toobins')
 
 			await expect(
 				toobins.connect(other2).canTransfer(other1.address, 0),
-			).to.be.revertedWith('This address already receieved Toobin')
+			).to.be.revertedWith('This address already receieved Toobins')
 		})
 
 		it('should prevents transfers of souldbound Charms', async () => {
