@@ -6,7 +6,6 @@ import '@openzeppelin/contracts/token/ERC721/IERC721.sol';
 import '@openzeppelin/contracts/access/Ownable.sol';
 import '@openzeppelin/contracts/utils/Strings.sol';
 import './IDelegationRegistry.sol';
-import 'hardhat/console.sol';
 
 contract Toobins is Ownable, ERC721 {
 	using Strings for uint256;
@@ -197,8 +196,6 @@ contract Toobins is Ownable, ERC721 {
 		uint tokenId
 	) internal view {
 		// owner doesn't need special checks
-		bool isOwner = to == owner();
-		console.log('isOwner', isOwner);
 		if (to == owner()) {
 			return;
 		}
@@ -211,14 +208,12 @@ contract Toobins is Ownable, ERC721 {
 
 		// check if they have a moonbird
 		bool toHasMoonbird = hasMoonbird(to);
-		console.log('toHasMoonbird', toHasMoonbird);
 		if (toHasMoonbird) {
 			return;
 		}
 
 		// check if they have a delegated vault with a moonbird
 		bool toDelegateHasMoonbird = delegateHasMoonbird(to);
-		console.log('toDelegateHasMoonbird', toDelegateHasMoonbird);
 		if (toDelegateHasMoonbird) {
 			return;
 		}
@@ -234,8 +229,6 @@ contract Toobins is Ownable, ERC721 {
 	}
 
 	function delegateHasMoonbird(address delegate) internal view returns (bool) {
-		address vault = checkForMoonbirdsVault(delegate);
-		console.log('delegate vault', vault);
 		return checkForMoonbirdsVault(delegate) != address(0);
 	}
 
@@ -255,16 +248,5 @@ contract Toobins is Ownable, ERC721 {
 		}
 
 		return address(0);
-	}
-
-	function getDelegates(
-		address delegate
-	) public view returns (IDelegationRegistry.DelegationInfo[] memory) {
-		IDelegationRegistry.DelegationInfo[]
-			memory delegateInfos = delegationRegistry.getDelegationsByDelegate(
-				delegate
-			);
-
-		return delegateInfos;
 	}
 }
