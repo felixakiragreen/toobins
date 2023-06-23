@@ -60,6 +60,24 @@ describe('Toobins', () => {
 			'IDelegationRegistry',
 		)
 
+		fakeDelegationRegistry.getDelegationsByDelegate.returns((params: any[]) => {
+			const delegateAddress: string = params[0]
+
+			if (delegateAddress === otherDeleCold.address) {
+				return [
+					[
+						1,
+						otherDeleCold.address,
+						otherDeleHot.address,
+						'0x0000000000000000000000000000000000000000',
+						BigNumber.from(0),
+					],
+				] as IDelegationRegistry.DelegationInfoStructOutput[]
+			}
+
+			return []
+		})
+
 		// deploy Moonbirds contract
 		const moonbirdsFactory = (await ethers.getContractFactory(
 			'MockMoonbirds',
@@ -109,13 +127,13 @@ describe('Toobins', () => {
 			await moonbirds.connect(other1).mint()
 			await moonbirds.connect(other2).mint()
 			await moonbirds.connect(other3).mint()
-			// await moonbirds.connect(otherDeleCold).mint()
+			await moonbirds.connect(otherDeleCold).mint()
 
 			expect(await moonbirds.balanceOf(other1.address)).to.eq(1)
 			expect(await moonbirds.balanceOf(other2.address)).to.eq(1)
 			expect(await moonbirds.balanceOf(other3.address)).to.eq(1)
 			expect(await moonbirds.balanceOf(other4.address)).to.eq(0)
-			// expect(await moonbirds.balanceOf(otherDeleCold.address)).to.eq(1)
+			expect(await moonbirds.balanceOf(otherDeleCold.address)).to.eq(1)
 			expect(await moonbirds.balanceOf(otherDeleHot.address)).to.eq(0)
 		})
 	})
@@ -155,18 +173,6 @@ describe('Toobins', () => {
 		})
 
 		it('should prevent transfers to addresses without a Moonbird', async () => {
-			fakeDelegationRegistry.getDelegationsByDelegate.returns([
-				[
-					1,
-					// '0x588672a61Fb89f2dcD9a70001F06E8B692567755',
-					otherDeleCold.address,
-					// '0xBA19BA5233b49794c33f01654e99A60E579E6f29',
-					otherDeleHot.address,
-					'0x0000000000000000000000000000000000000000',
-					BigNumber.from(0),
-				],
-			] as IDelegationRegistry.DelegationInfoStructOutput[])
-
 			// fakeDelegationRegistry.getDelegationsByDelegate.returns([])
 			// fakeDelegationRegistry.checkDelegateForAll.returns(true)
 
