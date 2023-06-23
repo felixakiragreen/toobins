@@ -38,8 +38,11 @@ describe('Toobins', () => {
 	let other2: SignerWithAddress
 	let other3: SignerWithAddress
 	let other4: SignerWithAddress
-	let otherDeleHot: SignerWithAddress
-	let otherDeleCold: SignerWithAddress
+	let other5: SignerWithAddress
+	let otherDeleHot1: SignerWithAddress
+	let otherDeleCold1: SignerWithAddress
+	let otherDeleHot2: SignerWithAddress
+	let otherDeleCold2: SignerWithAddress
 	let others: SignerWithAddress[]
 
 	before(async () => {
@@ -50,8 +53,11 @@ describe('Toobins', () => {
 			other2,
 			other3,
 			other4,
-			otherDeleHot,
-			otherDeleCold,
+			other5,
+			otherDeleHot1,
+			otherDeleCold1,
+			otherDeleHot2,
+			otherDeleCold2,
 			...others
 		] = await ethers.getSigners()
 
@@ -63,12 +69,24 @@ describe('Toobins', () => {
 		fakeDelegationRegistry.getDelegationsByDelegate.returns((params: any[]) => {
 			const delegateAddress: string = params[0]
 
-			if (delegateAddress === otherDeleHot.address) {
+			if (delegateAddress === otherDeleHot1.address) {
 				return [
 					[
 						1,
-						otherDeleCold.address,
-						otherDeleHot.address,
+						otherDeleCold1.address,
+						otherDeleHot1.address,
+						'0x0000000000000000000000000000000000000000',
+						BigNumber.from(0),
+					],
+				] as IDelegationRegistry.DelegationInfoStructOutput[]
+			}
+
+			if (delegateAddress === otherDeleHot2.address) {
+				return [
+					[
+						1,
+						otherDeleCold2.address,
+						otherDeleHot2.address,
 						'0x0000000000000000000000000000000000000000',
 						BigNumber.from(0),
 					],
@@ -127,14 +145,19 @@ describe('Toobins', () => {
 			await moonbirds.connect(other1).mint()
 			await moonbirds.connect(other2).mint()
 			await moonbirds.connect(other3).mint()
-			await moonbirds.connect(otherDeleCold).mint()
+			await moonbirds.connect(other4).mint()
+			await moonbirds.connect(otherDeleCold1).mint()
+			await moonbirds.connect(otherDeleCold2).mint()
 
 			expect(await moonbirds.balanceOf(other1.address)).to.eq(1)
 			expect(await moonbirds.balanceOf(other2.address)).to.eq(1)
 			expect(await moonbirds.balanceOf(other3.address)).to.eq(1)
-			expect(await moonbirds.balanceOf(other4.address)).to.eq(0)
-			expect(await moonbirds.balanceOf(otherDeleCold.address)).to.eq(1)
-			expect(await moonbirds.balanceOf(otherDeleHot.address)).to.eq(0)
+			expect(await moonbirds.balanceOf(other4.address)).to.eq(1)
+			expect(await moonbirds.balanceOf(other5.address)).to.eq(0)
+			expect(await moonbirds.balanceOf(otherDeleCold1.address)).to.eq(1)
+			expect(await moonbirds.balanceOf(otherDeleHot1.address)).to.eq(0)
+			expect(await moonbirds.balanceOf(otherDeleCold2.address)).to.eq(1)
+			expect(await moonbirds.balanceOf(otherDeleHot2.address)).to.eq(0)
 		})
 	})
 
@@ -174,13 +197,13 @@ describe('Toobins', () => {
 
 		it('should prevent transfers to addresses without a Moonbird', async () => {
 			await expect(
-				toobins.connect(other1).pass(other4.address),
+				toobins.connect(other1).pass(other5.address),
 			).to.be.revertedWith(
 				'Toobins can only be transferred to an address with a Moonbird',
 			)
 
 			await expect(
-				toobins.connect(other1).canTransfer(other4.address, 0),
+				toobins.connect(other1).canTransfer(other5.address, 0),
 			).to.be.revertedWith(
 				'Toobins can only be transferred to an address with a Moonbird',
 			)
@@ -208,18 +231,18 @@ describe('Toobins', () => {
 		it('should transfer the Toobins to an address with a Moonbird delegate', async () => {
 			const o2_balanceBefore = await toobins.balanceOf(other2.address)
 			expect(o2_balanceBefore).to.eq(1)
-			const oDH_balanceBefore = await toobins.balanceOf(otherDeleHot.address)
+			const oDH_balanceBefore = await toobins.balanceOf(otherDeleHot1.address)
 			expect(oDH_balanceBefore).to.eq(0)
 
 			expect(
-				await toobins.connect(other2).canTransfer(otherDeleHot.address, 0),
+				await toobins.connect(other2).canTransfer(otherDeleHot1.address, 0),
 			).to.eq(true)
 
 			await toobins
 				.connect(other2)
 				['safeTransferFrom(address,address,uint256)'](
 					other2.address,
-					otherDeleHot.address,
+					otherDeleHot1.address,
 					0,
 				)
 
@@ -228,12 +251,52 @@ describe('Toobins', () => {
 			const o2_balanceAfter = await toobins.balanceOf(other2.address)
 			expect(o2_balanceAfter).to.eq(1)
 
-			const oDH_balanceAfter = await toobins.balanceOf(otherDeleHot.address)
+			const oDH_balanceAfter = await toobins.balanceOf(otherDeleHot1.address)
 			expect(oDH_balanceAfter).to.eq(1)
 		})
 
-		it('should let a delegate transfer the Toobin', async () => {
-			// TODO: delegatedPass
+		it('should let a delegate transfer the Toobin to a delegate', async () => {
+			expect(await toobins.balanceOf(otherDeleHot1.address)).to.eq(1)
+			expect(await toobins.balanceOf(otherDeleHot2.address)).to.eq(0)
+
+			expect(
+				await toobins
+					.connect(otherDeleHot1)
+					.canTransfer(otherDeleHot2.address, 0),
+			).to.eq(true)
+
+			await toobins
+				.connect(otherDeleHot1)
+				['safeTransferFrom(address,address,uint256)'](
+					otherDeleHot1.address,
+					otherDeleHot2.address,
+					0,
+				)
+
+			expect(await toobins.balanceOf(otherDeleHot1.address)).to.eq(0) // should no longer have a Toobin
+			expect(await toobins.balanceOf(otherDeleCold1.address)).to.eq(1) // should have a Charm
+			expect(await toobins.balanceOf(otherDeleHot2.address)).to.eq(1) // has Toobin now
+		})
+
+		it('should let a delegate transfer the Toobin to a normal wallet', async () => {
+			expect(await toobins.balanceOf(otherDeleHot2.address)).to.eq(1)
+			expect(await toobins.balanceOf(other4.address)).to.eq(0)
+
+			expect(
+				await toobins.connect(otherDeleHot2).canTransfer(other4.address, 0),
+			).to.eq(true)
+
+			await toobins
+				.connect(otherDeleHot2)
+				['safeTransferFrom(address,address,uint256)'](
+					otherDeleHot2.address,
+					other4.address,
+					0,
+				)
+
+			expect(await toobins.balanceOf(otherDeleHot2.address)).to.eq(0) // should no longer has Toobin
+			expect(await toobins.balanceOf(otherDeleCold2.address)).to.eq(1) // should have a Charm
+			expect(await toobins.balanceOf(other4.address)).to.eq(1) // has Toobin now
 		})
 
 		it('should prevent transfers to addresses that already had the Toobin', async () => {
@@ -292,6 +355,8 @@ describe('Toobins', () => {
 		it('should not leave behind a Charm for the owner', async () => {
 			const owner_balanceBefore = await toobins.balanceOf(owner.address)
 			expect(owner_balanceBefore).to.eq(1)
+
+			expect(await toobins.canTransfer(other3.address, 0)).to.eq(true)
 
 			await toobins.pass(other3.address)
 
