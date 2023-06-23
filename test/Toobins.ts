@@ -63,7 +63,7 @@ describe('Toobins', () => {
 		fakeDelegationRegistry.getDelegationsByDelegate.returns((params: any[]) => {
 			const delegateAddress: string = params[0]
 
-			if (delegateAddress === otherDeleCold.address) {
+			if (delegateAddress === otherDeleHot.address) {
 				return [
 					[
 						1,
@@ -173,15 +173,6 @@ describe('Toobins', () => {
 		})
 
 		it('should prevent transfers to addresses without a Moonbird', async () => {
-			// fakeDelegationRegistry.getDelegationsByDelegate.returns([])
-			// fakeDelegationRegistry.checkDelegateForAll.returns(true)
-
-			console.log('inside here')
-
-			const testMockDelegates = await toobins.getDelegates(other4.address)
-
-			console.log('testMockDelegates', testMockDelegates)
-
 			await expect(
 				toobins.connect(other1).pass(other4.address),
 			).to.be.revertedWith(
@@ -212,6 +203,25 @@ describe('Toobins', () => {
 
 			const o2_balanceAfter = await toobins.balanceOf(other2.address)
 			expect(o2_balanceAfter).to.eq(1)
+		})
+
+		it('should transfer the Toobins to an address with a Moonbird delegate', async () => {
+			const o2_balanceBefore = await toobins.balanceOf(other2.address)
+			expect(o2_balanceBefore).to.eq(1)
+			const oDH_balanceBefore = await toobins.balanceOf(otherDeleHot.address)
+			expect(oDH_balanceBefore).to.eq(0)
+
+			expect(
+				await toobins.connect(other2).canTransfer(otherDeleHot.address, 0),
+			).to.eq(true)
+
+			await toobins.connect(other2).pass(otherDeleHot.address)
+
+			const o2_balanceAfter = await toobins.balanceOf(other2.address)
+			expect(o2_balanceAfter).to.eq(1)
+
+			const oDH_balanceAfter = await toobins.balanceOf(otherDeleHot.address)
+			expect(oDH_balanceAfter).to.eq(1)
 		})
 
 		it('should prevent transfers to addresses that already had the Toobin', async () => {
