@@ -34,7 +34,6 @@ export interface ToobinsInterface extends utils.Interface {
     "baseTokenURI()": FunctionFragment;
     "canTransfer(address,uint256)": FunctionFragment;
     "conclude()": FunctionFragment;
-    "delegatedPass(address,address)": FunctionFragment;
     "delegationRegistry()": FunctionFragment;
     "externalMint(address)": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
@@ -66,7 +65,6 @@ export interface ToobinsInterface extends utils.Interface {
       | "baseTokenURI"
       | "canTransfer"
       | "conclude"
-      | "delegatedPass"
       | "delegationRegistry"
       | "externalMint"
       | "getApproved"
@@ -108,10 +106,6 @@ export interface ToobinsInterface extends utils.Interface {
     values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(functionFragment: "conclude", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "delegatedPass",
-    values: [PromiseOrValue<string>, PromiseOrValue<string>]
-  ): string;
   encodeFunctionData(
     functionFragment: "delegationRegistry",
     values?: undefined
@@ -207,10 +201,6 @@ export interface ToobinsInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "conclude", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "delegatedPass",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(
     functionFragment: "delegationRegistry",
     data: BytesLike
@@ -381,12 +371,6 @@ export interface Toobins extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    delegatedPass(
-      vault: PromiseOrValue<string>,
-      to: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
     delegationRegistry(overrides?: CallOverrides): Promise<[string]>;
 
     externalMint(
@@ -510,12 +494,6 @@ export interface Toobins extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  delegatedPass(
-    vault: PromiseOrValue<string>,
-    to: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
   delegationRegistry(overrides?: CallOverrides): Promise<string>;
 
   externalMint(
@@ -636,12 +614,6 @@ export interface Toobins extends BaseContract {
     ): Promise<boolean>;
 
     conclude(overrides?: CallOverrides): Promise<void>;
-
-    delegatedPass(
-      vault: PromiseOrValue<string>,
-      to: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
 
     delegationRegistry(overrides?: CallOverrides): Promise<string>;
 
@@ -804,12 +776,6 @@ export interface Toobins extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    delegatedPass(
-      vault: PromiseOrValue<string>,
-      to: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
     delegationRegistry(overrides?: CallOverrides): Promise<BigNumber>;
 
     externalMint(
@@ -931,12 +897,6 @@ export interface Toobins extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     conclude(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    delegatedPass(
-      vault: PromiseOrValue<string>,
-      to: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
