@@ -22,27 +22,31 @@ Scope of Work:
       Transfer:
          [x] override transfers
          [x] require a Moonbird in the wallet
-            [ ] except if owner
-         [ ] support delegate.cash for Moonbird check
-         [ ] on transfer, mint Charm
+            [x] except if owner
+         [x] support delegate.cash for Moonbird check
+         [x] on transfer, mint Charm
          [x] make Charms soulbound
          [ ] prevent burning of Toobins?
             [ ] except if owner
 
    Testing:
       [x] Mock Moonbirds
-      [ ] Smock DelegationRegistry
-         [ ] Receive as Delegate (HOT)
-         [ ] Transfer as Delegate (HOT)
+      [x] Smock DelegationRegistry
+         [x] Receive as Delegate (HOT)
+         [x] Transfer as Delegate (HOT)
             If you go to transfer
             but you don't have a moonbird
             that means you must be a delegate
             So check for delegates in order to know where to mint the charm
-         [ ] Receive as Delegated (COLD)
+         [x] Receive as Delegated (COLD)
             Ensure that the Hot wallet can transfer Toobins out of it
       [ ] 100% test code coverage
          [ ] Admin
          [ ] Visual
          [ ] Mint
          [ ] Transfer
+            [x] Norm to norm
+            [x] Norm to dele
+            [ ] Dele to dele
+            [ ] Dele to norm 
       [ ] Deploy & test on Goerli
