@@ -41,7 +41,6 @@ contract Toobins is Ownable, ERC721 {
 		address from = ownerOf(0);
 		// return it to home base
 		_transfer(from, msg.sender, 0);
-
 		// leave behind the last Charm
 		internalMint(from);
 	}
@@ -87,10 +86,7 @@ contract Toobins is Ownable, ERC721 {
 	// the primary transfer function
 	// (doesn't require `from` or `tokenId`)
 	function pass(address to) public {
-		_requireBasicTransferChecks(to, 0);
-		_requireSpecialTransferChecks(to, 0);
-
-		_pass(msg.sender, to, 0, '');
+		transferFrom(msg.sender, to, 0);
 	}
 
 	function _pass(
@@ -120,10 +116,7 @@ contract Toobins is Ownable, ERC721 {
 		address to,
 		uint tokenId
 	) public override {
-		_requireBasicTransferChecks(to, tokenId);
-		_requireSpecialTransferChecks(to, tokenId);
-
-		_pass(from, to, tokenId, '');
+		safeTransferFrom(from, to, tokenId, '');
 	}
 
 	function safeTransferFrom(
@@ -141,7 +134,7 @@ contract Toobins is Ownable, ERC721 {
 		bytes memory _data
 	) public override {
 		_requireBasicTransferChecks(to, tokenId);
-		_requireSpecialTransferChecks(to, tokenId);
+		_requireSpecialTransferChecks(to);
 
 		_pass(from, to, tokenId, _data);
 	}
@@ -155,7 +148,7 @@ contract Toobins is Ownable, ERC721 {
 		bytes memory _data
 	) internal {
 		_requireBasicTransferChecks(to, tokenId);
-		_requireSpecialTransferChecks(to, tokenId);
+		_requireSpecialTransferChecks(to);
 
 		_safeTransfer(from, to, tokenId, _data);
 	}
@@ -174,7 +167,7 @@ contract Toobins is Ownable, ERC721 {
 
 	function canTransfer(address to, uint tokenId) public view returns (bool) {
 		_requireBasicTransferChecks(to, tokenId);
-		_requireSpecialTransferChecks(to, tokenId);
+		_requireSpecialTransferChecks(to);
 
 		return true;
 	}
@@ -190,21 +183,7 @@ contract Toobins is Ownable, ERC721 {
 		require(balanceOf(to) == 0, 'This address already receieved Toobins');
 	}
 
-	function _requireSpecialTransferChecks(
-		address to,
-		uint tokenId
-	) internal view {
-		// owner doesn't need special checks
-		if (to == owner()) {
-			return;
-		}
-
-		// ensure the sender is the owner or approved
-		require(
-			_isApprovedOrOwner(msg.sender, tokenId),
-			'ERC721: transfer caller is not owner nor approved'
-		);
-
+	function _requireSpecialTransferChecks(address to) internal view {
 		// check if they have a moonbird
 		bool toHasMoonbird = hasMoonbird(to);
 		if (toHasMoonbird) {
