@@ -215,13 +215,25 @@ describe('Toobins', () => {
 				await toobins.connect(other2).canTransfer(otherDeleHot.address, 0),
 			).to.eq(true)
 
-			await toobins.connect(other2).pass(otherDeleHot.address)
+			await toobins
+				.connect(other2)
+				['safeTransferFrom(address,address,uint256)'](
+					other2.address,
+					otherDeleHot.address,
+					0,
+				)
+
+			// pass(otherDeleHot.address)
 
 			const o2_balanceAfter = await toobins.balanceOf(other2.address)
 			expect(o2_balanceAfter).to.eq(1)
 
 			const oDH_balanceAfter = await toobins.balanceOf(otherDeleHot.address)
 			expect(oDH_balanceAfter).to.eq(1)
+		})
+
+		it('should let a delegate transfer the Toobin', async () => {
+			// TODO: delegatedPass
 		})
 
 		it('should prevent transfers to addresses that already had the Toobin', async () => {
