@@ -87,10 +87,17 @@ contract Toobins is Ownable, ERC721 {
 	// the primary transfer function
 	// (doesn't require `from` or `tokenId`)
 	function pass(address to) public {
+		// TODO: here we need to handle if this is a delegate
+		// then we do the normal transfer
+		// but then we need to find the wallet with a moonbird, and mint it there
 		transferOverride(msg.sender, to, 0);
 	}
 
 	function delegatedPass(address vault, address to) public {
+		// in this situation
+		// we transfer the Toobins out of msg.sender
+		// but mint it to the vault
+
 		// TODO: handle this properly
 		// if (
 		// 	!delegationRegistry.checkDelegateForContract(
@@ -119,7 +126,7 @@ contract Toobins is Ownable, ERC721 {
 		address to,
 		uint tokenId
 	) public override {
-		transferOverride(from, to, tokenId);
+		safeTransferFrom(from, to, tokenId, '');
 	}
 
 	function safeTransferFrom(
