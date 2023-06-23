@@ -87,28 +87,30 @@ contract Toobins is Ownable, ERC721 {
 	// the primary transfer function
 	// (doesn't require `from` or `tokenId`)
 	function pass(address to) public {
-		// TODO: here we need to handle if this is a delegate
-		// then we do the normal transfer
-		// but then we need to find the wallet with a moonbird, and mint it there
-		transferOverride(msg.sender, to, 0);
+		_requireBasicTransferChecks(to, 0);
+		_requireSpecialTransferChecks(to, 0);
+
+		_pass(msg.sender, to, 0, '');
 	}
 
-	function delegatedPass(address vault, address to) public {
-		// in this situation
-		// we transfer the Toobins out of msg.sender
-		// but mint it to the vault
+	function _pass(
+		address from,
+		address to,
+		uint tokenId,
+		bytes memory _data
+	) internal {
+		handleTransfer(from, to, tokenId, _data);
 
-		// TODO: handle this properly
-		// if (
-		// 	!delegationRegistry.checkDelegateForContract(
-		// 		_msgSender(),
-		// 		vault,
-		// 		address(this)
-		// 	)
-		// ) revert NotDelegatedError();
-
-		//
-		transferOverride(vault, to, 0);
+		// if there is a moonbird, mint to sender
+		if (hasMoonbird(msg.sender)) {
+			handleMint(msg.sender);
+		} else {
+			// if delegated, mint to vault
+			address vault = checkForMoonbirdsVault(msg.sender);
+			if (vault != address(0)) {
+				handleMint(vault);
+			}
+		}
 	}
 
 	// overriding ERC-721 transfer functions
@@ -118,7 +120,10 @@ contract Toobins is Ownable, ERC721 {
 		address to,
 		uint tokenId
 	) public override {
-		transferOverride(from, to, tokenId);
+		_requireBasicTransferChecks(to, tokenId);
+		_requireSpecialTransferChecks(to, tokenId);
+
+		_pass(from, to, tokenId, '');
 	}
 
 	function safeTransferFrom(
@@ -135,31 +140,13 @@ contract Toobins is Ownable, ERC721 {
 		uint tokenId,
 		bytes memory _data
 	) public override {
-		transferOverride(from, to, tokenId, _data);
+		_requireBasicTransferChecks(to, tokenId);
+		_requireSpecialTransferChecks(to, tokenId);
+
+		_pass(from, to, tokenId, _data);
 	}
 
 	// overriding with the following functions
-
-	function transferOverride(address from, address to, uint tokenId) internal {
-		transferOverride(from, to, tokenId, '');
-	}
-
-	// this function is where the "share-to-mint" magic happens
-	// first do the "transfer", then "mint" to the `from` address
-	function transferOverride(
-		address from,
-		address to,
-		uint tokenId,
-		bytes memory _data
-	) internal {
-		// do the transfer
-		handleTransfer(from, to, tokenId, _data);
-		// do NOT mint when transferring from the (contract) owner
-		// (we don't want to leave a Charm in the Owner's address)
-		if (from != owner()) {
-			internalMint(from);
-		}
-	}
 
 	function handleTransfer(
 		address from,
@@ -167,9 +154,18 @@ contract Toobins is Ownable, ERC721 {
 		uint tokenId,
 		bytes memory _data
 	) internal {
-		_requireTransferChecks(to, tokenId);
+		_requireBasicTransferChecks(to, tokenId);
+		_requireSpecialTransferChecks(to, tokenId);
 
 		_safeTransfer(from, to, tokenId, _data);
+	}
+
+	function handleMint(address location) internal {
+		// do NOT mint when transferring from the (contract) owner
+		// (we don't want to leave a Charm in the Owner's address)
+		if (location != owner()) {
+			internalMint(location);
+		}
 	}
 
 	//
@@ -177,14 +173,10 @@ contract Toobins is Ownable, ERC721 {
 	//
 
 	function canTransfer(address to, uint tokenId) public view returns (bool) {
-		_requireTransferChecks(to, tokenId);
-
-		return true;
-	}
-
-	function _requireTransferChecks(address to, uint tokenId) internal view {
 		_requireBasicTransferChecks(to, tokenId);
 		_requireSpecialTransferChecks(to, tokenId);
+
+		return true;
 	}
 
 	function _requireBasicTransferChecks(
