@@ -26,8 +26,7 @@ Scope of Work:
          [x] support delegate.cash for Moonbird check
          [x] on transfer, mint Charm
          [x] make Charms soulbound
-         [ ] prevent burning of Toobins?
-            [ ] except if owner
+         [x] prevent burning of Toobins?
 
    Testing:
       [x] Mock Moonbirds
@@ -40,13 +39,13 @@ Scope of Work:
             So check for delegates in order to know where to mint the charm
          [x] Receive as Delegated (COLD)
             Ensure that the Hot wallet can transfer Toobins out of it
-      [ ] 100% test code coverage
-         [ ] Admin
-         [ ] Visual
-         [ ] Mint
-         [ ] Transfer
+      [x] 100% test code coverage
+         [x] Admin
+         [x] Visual
+         [x] Mint
+         [x] Transfer
             [x] Norm to norm
             [x] Norm to dele
-            [ ] Dele to dele
-            [ ] Dele to norm 
+            [x] Dele to dele
+            [x] Dele to norm 
       [ ] Deploy & test on Goerli
