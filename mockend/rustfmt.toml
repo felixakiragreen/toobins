@@ -1,0 +1,4 @@
+indent_style = "Block"
+hard_tabs = true
+use_small_heuristics = "Off"
+chain_width = 0
