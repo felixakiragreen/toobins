@@ -8,6 +8,8 @@ publish = false
 
 [dependencies]
 shuttle-runtime = "0.18.0"
-rocket = "0.5.0-rc.3"
+rocket = { version = "0.5.0-rc.3", features = ["json"] }
 shuttle-rocket = "0.18.0"
 tokio = "1.28.2"
+serde = { version = "1.0.164", features = ["derive"] }
+serde_json = "1.0.99"
