@@ -16,3 +16,6 @@ cache
 /artifacts
 coverage
 coverage.json
+
+# rust
+mockend/target
