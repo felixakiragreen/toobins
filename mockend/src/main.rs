@@ -18,10 +18,20 @@ fn index() -> &'static str {
 
 #[get("/<id>")]
 async fn id_handler(id: u64) -> Option<String> {
+	let name: String = match id {
+		0 => "Toobins".to_string(),
+		id => format!("Toobins Charm #{}", id),
+	};
+
+	let image: String = match id {
+		0 => "https://turquoise-acceptable-badger-753.mypinata.cloud/ipfs/QmZeEjexxbL6oNEWZZjKf3dikrDUgQDnqCiCkxnc8bGPCD?_gl=1*17ye3f4*rs_ga*MTg0ODQ2MDQxNi4xNjg3NzA4OTc1*rs_ga_5RMPXG14TE*MTY4NzcwODk3NC4xLjEuMTY4NzcwOTA0MS42MC4wLjA.".to_string(),
+		_ => "https://turquoise-acceptable-badger-753.mypinata.cloud/ipfs/QmP1sEYmQoHngMTwC6mpkaDanjkUThd428JV3a2Twm1reS?_gl=1*1vw3afb*rs_ga*MTg0ODQ2MDQxNi4xNjg3NzA4OTc1*rs_ga_5RMPXG14TE*MTY4NzcwODk3NC4xLjEuMTY4NzcwOTA0MS42MC4wLjA.".to_string(),
+	};
+
 	let metadata = TokenMetadata {
-		name: format!("test id: {}", id),
-		image: "image".to_string(),
-		external_url: "URL".to_string(),
+		name: name,
+		image: image,
+		external_url: "https://www.proof.xyz/toobins".to_string(),
 	};
 
 	let metadata_str = serde_json::to_string(&metadata);
@@ -30,9 +40,6 @@ async fn id_handler(id: u64) -> Option<String> {
 		Ok(string) => Some(string),
 		_ => None,
 	};
-
-	// return metadata_str;
-	// format!("requested id: {}", id)
 }
 
 #[shuttle_runtime::main]
