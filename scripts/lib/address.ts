@@ -14,20 +14,6 @@ type AddressCurrentFileJson = {
 	}
 }
 
-type AddressHistoryFileJson = {
-	// networkName
-	[key: string]: {
-		// contractName
-		[key: string]: {
-			// contract address
-			[key: string]: {
-				created: string // ISO date string
-				updated: string // ISO date string
-			}
-		}
-	}
-}
-
 export async function saveAddress(
 	contract: Contract,
 	contractName: string,
@@ -37,7 +23,6 @@ export async function saveAddress(
 
 	try {
 		await saveAdddressCurrent(contract, contractName, networkName)
-		await saveAdddressHistory(contract, contractName, networkName)
 
 		logger.success('Saved contract addresses')
 	} catch (e) {
@@ -71,16 +56,6 @@ export async function getAddress(
 	}
 }
 
-async function getAddressHistory(): Promise<[string, AddressHistoryFileJson]> {
-	const addressFilePath = path.join(process.cwd(), 'addressHistory.json')
-	await fs.ensureFile(addressFilePath)
-
-	let addressFileJson: AddressHistoryFileJson = {}
-	addressFileJson = await fs.readJson(addressFilePath)
-
-	return [addressFilePath, addressFileJson]
-}
-
 async function saveAdddressCurrent(
 	contract: Contract,
 	contractName: string,
@@ -102,42 +77,5 @@ async function saveAdddressCurrent(
 		logger.success('Saved CURRENT contract address')
 	} catch (e) {
 		logger.error('Failed to save CURRENT contract addresses: ', e)
-	}
-}
-
-async function saveAdddressHistory(
-	contract: Contract,
-	contractName: string,
-	networkName: string,
-) {
-	logger(logger._info('Saving HISTORY contract address …'))
-
-	try {
-		const [addressFilePath, addressFileJson] = await getAddressHistory()
-
-		const entry = get(
-			addressFileJson,
-			[networkName, contractName, contract.address],
-			{
-				created: new Date().toISOString(),
-			},
-		)
-
-		const mergedJson = merge(addressFileJson, {
-			[networkName]: {
-				[contractName]: {
-					[contract.address]: {
-						...entry,
-						updated: new Date().toISOString(),
-					},
-				},
-			},
-		})
-
-		await fs.outputJson(addressFilePath, mergedJson, { spaces: '\t' })
-
-		logger.success('Saved HISTORY contract address')
-	} catch (e) {
-		logger.error('Failed to save HISTORY contract addresses: ', e)
 	}
 }
