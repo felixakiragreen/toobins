@@ -18,7 +18,7 @@ what promptNetwork does
 
 */
 
-const NETWORKS = ['localhost', 'rinkeby', 'ropsten', 'goerli', 'mainnet']
+const NETWORKS = ['localhost', 'goerli', 'mainnet']
 
 export async function promptNetwork(question?: string) {
 	const selectNetwork: Prompts.PromptObject = {
@@ -26,12 +26,7 @@ export async function promptNetwork(question?: string) {
 		name: 'network',
 		message: question || 'Which network?',
 		choices: NETWORKS.map((networkName) => ({
-			title:
-				networkName === 'rinkeby'
-					? 'r̶i̶n̶k̶e̶b̶y̶'
-					: networkName === 'ropsten'
-					? 'r̶o̶p̶s̶t̶e̶n̶'
-					: networkName,
+			title: networkName,
 			value: networkName,
 			description: networkName === 'goerli' ? 'testing on OpenSea' : undefined,
 		})),
