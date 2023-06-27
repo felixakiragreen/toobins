@@ -44,11 +44,11 @@ const config: HardhatUserConfig = {
 			accounts: [TESTNET_PRIVATE_KEY, TESTNET_SECONDARY_PRIVATE_KEY],
 			from: TESTNET_ADDRESS,
 		},
-		mainnet: {
-			url: `https://eth-mainnet.g.alchemy.com/v2/${ALCHEMY_PROD_API_KEY}`,
-			accounts: [MAINNET_PRIVATE_KEY],
-			from: MAINNET_ADDRESS,
-		},
+		// mainnet: {
+		// 	url: `https://eth-mainnet.g.alchemy.com/v2/${ALCHEMY_PROD_API_KEY}`,
+		// 	accounts: [MAINNET_PRIVATE_KEY],
+		// 	from: MAINNET_ADDRESS,
+		// },
 		coverage: {
 			url: 'http://127.0.0.1:8555', // Coverage launches its own ganache-cli client
 			allowUnlimitedContractSize: true,
