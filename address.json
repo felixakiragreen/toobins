@@ -1,8 +1,11 @@
 {
 	"goerli": {
-		"DelegationRegistry": "0x00000000000076A84feF008CDAbe6409d2FE638B"
+		"DelegationRegistry": "0x00000000000076A84feF008CDAbe6409d2FE638B",
+		"Moonbirds": "0xe251E003dDF7003Df91D63dAaa9270a75fd64F6D",
+		"Toobins": "0x0a239365Bbab8DbE0df035245B905aad37b55F16"
 	},
 	"mainnet": {
-		"DelegationRegistry": "0x00000000000076A84feF008CDAbe6409d2FE638B"
+		"DelegationRegistry": "0x00000000000076A84feF008CDAbe6409d2FE638B",
+		"Moonbirds": "0x23581767a106ae21c074b2276D25e5C3e136a68b"
 	}
 }
