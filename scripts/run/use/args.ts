@@ -23,7 +23,7 @@ export async function getArgs(contractName: string): Promise<any[]> {
 		}
 
 		// 2 - metadata / base token URI
-		const metadata = 'TODO'
+		const metadata = 'https://mock-toobins.shuttleapp.rs/'
 
 		args.push(metadata)
 
