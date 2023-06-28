@@ -36,7 +36,7 @@ This is just a log of what I did to make this [OpenSea collection](https://testn
 
 - primary → `0xb0436355746155dFB1bbD4b029241D7dee168FFd`
 - secondary → `0x79d17Aaf7816578C5B110d69E76C96189e747762`
-- tertriary → `0x66937401467317541fDd9f5988A4AB71b92Fd423`
+- tertiary → `0x66937401467317541fDd9f5988A4AB71b92Fd423`
 - quartenary → `0x61fA6bF463Eb079F52932A7ED5bA0e63505D8Ed5`
 - quinary → `0x992c983C235AffA30372ee6759319f89989ad4Db`
 
