@@ -12,7 +12,7 @@
 
 ## Important Notes
 
-The NFT smart contract (`contracts/Toobins.sol`) and the delagate.cash
+The NFT smart contract (`contracts/Toobins.sol`) and the delegate.cash
 interface (`contracts/IDelegationRegistry.sol`) can be tested and deployed
 from this project or you can just copy them into your preferred environment.
 
