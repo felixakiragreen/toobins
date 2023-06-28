@@ -29,10 +29,15 @@ contract Toobins is Ownable, ERC721 {
 	// ADMIN
 	//
 
+	// Please note: there is no check for a moonbird on the initiate
 	function initiate(address luckyFirst) public onlyOwner {
 		require(_exists(0) == false, 'Toobins run has already started');
 
 		internalMint(luckyFirst);
+	}
+
+	function conclude() public onlyOwner {
+		yoink();
 	}
 
 	// returns the 0riginal to the (contract) owner's wallet if it gets stuck
@@ -43,10 +48,6 @@ contract Toobins is Ownable, ERC721 {
 		_transfer(from, msg.sender, 0);
 		// leave behind the last Charm
 		internalMint(from);
-	}
-
-	function conclude() public onlyOwner {
-		yoink();
 	}
 
 	function setBaseTokenURI(string memory _baseTokenURI) public onlyOwner {
@@ -65,7 +66,8 @@ contract Toobins is Ownable, ERC721 {
 
 	// MINT
 
-	// This prevents Toobins from getting trapped
+	// This try+catch prevents Toobins from getting trapped
+	// In the same way The Worm was trapped by The Wriggler
 	function internalMint(address to) internal {
 		try this.externalMint(to) {} catch {}
 	}
@@ -87,26 +89,6 @@ contract Toobins is Ownable, ERC721 {
 	// (doesn't require `from` or `tokenId`)
 	function pass(address to) public {
 		transferFrom(msg.sender, to, 0);
-	}
-
-	function _pass(
-		address from,
-		address to,
-		uint tokenId,
-		bytes memory _data
-	) internal {
-		handleTransfer(from, to, tokenId, _data);
-
-		// if there is a moonbird, mint to sender
-		if (hasMoonbird(msg.sender)) {
-			handleMint(msg.sender);
-		} else {
-			// if delegated, mint to vault
-			address vault = checkForMoonbirdsVault(msg.sender);
-			if (vault != address(0)) {
-				handleMint(vault);
-			}
-		}
 	}
 
 	// overriding ERC-721 transfer functions
@@ -140,6 +122,26 @@ contract Toobins is Ownable, ERC721 {
 	}
 
 	// overriding with the following functions
+
+	function _pass(
+		address from,
+		address to,
+		uint tokenId,
+		bytes memory _data
+	) internal {
+		handleTransfer(from, to, tokenId, _data);
+
+		// if there is a moonbird, mint to sender
+		if (hasMoonbird(msg.sender)) {
+			handleMint(msg.sender);
+		} else {
+			// if delegated, mint to vault
+			address vault = checkForMoonbirdsVault(msg.sender);
+			if (vault != address(0)) {
+				handleMint(vault);
+			}
+		}
+	}
 
 	function handleTransfer(
 		address from,
