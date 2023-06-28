@@ -23,9 +23,18 @@ export async function getArgs(contractName: string): Promise<any[]> {
 		}
 
 		// 2 - metadata / base token URI
-		const metadata = 'https://mock-toobins.shuttleapp.rs/'
+		// TODO: update this to the real metadata URI
 
-		args.push(metadata)
+		if (network.name === 'mainnet') {
+			logger.error('Constructor argument for `baseTokenURI` is not configured')
+			throw new Error(
+				'Please configure `baseTokenURI` in `scripts/run/use/args.ts` and remove this error.',
+			)
+		} else if (network.name === 'goerli') {
+			const metadata = 'https://mock-toobins.shuttleapp.rs/'
+
+			args.push(metadata)
+		}
 
 		// 3 - DELEGATION REGISTRY address
 		const delegationAddress = await getAddress(
