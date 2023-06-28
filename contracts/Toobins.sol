@@ -40,13 +40,13 @@ contract Toobins is Ownable, ERC721 {
 		yoink();
 	}
 
-	// returns the 0riginal to the (contract) owner's wallet if it gets stuck
+	// returns the Toobins to the (contract) owner's wallet if it gets stuck
 	function yoink() public onlyOwner {
-		// get the address where the Toobin is
+		// get the address where the Toobins is
 		address from = ownerOf(0);
 		// return it to home base
 		_transfer(from, msg.sender, 0);
-		// leave behind the last Charm
+		// leave behind a Charm
 		internalMint(from);
 	}
 
