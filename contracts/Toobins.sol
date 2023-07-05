@@ -183,6 +183,11 @@ contract Toobins is Ownable, ERC721 {
 		require(tokenId == 0, 'Charms are soulbound and cannot be transferred');
 
 		require(balanceOf(to) == 0, 'This address already receieved Toobins');
+
+		require(
+			_isApprovedOrOwner(msg.sender, tokenId),
+			'ERC721: caller is not token owner or approved'
+		);
 	}
 
 	function _requireSpecialTransferChecks(address to) internal view {
