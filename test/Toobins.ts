@@ -195,6 +195,12 @@ describe('Toobins', () => {
 			).to.be.revertedWith('ERC721: address zero is not a valid owner')
 		})
 
+		it('should prevent transfers from non-holdesr', async () => {
+			await expect(
+				toobins.connect(other1).transferFrom(other1.address, other2.address, 0),
+			).to.be.revertedWith('ERC721: caller is not token owner or approved')
+		})
+
 		it('should prevent transfers to addresses without a Moonbird', async () => {
 			await expect(
 				toobins.connect(other1).pass(other5.address),
