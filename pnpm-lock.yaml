@@ -4,6 +4,9 @@ devDependencies:
   '@defi-wonderland/smock':
     specifier: ^2.3.4
     version: 2.3.4(@ethersproject/abi@5.7.0)(@ethersproject/abstract-provider@5.7.0)(@ethersproject/abstract-signer@5.7.0)(@nomiclabs/hardhat-ethers@2.2.3)(ethers@5.7.2)(hardhat@2.14.0)
+  '@divergencetech/ethier':
+    specifier: ^0.55.0
+    version: 0.55.0
   '@ethersproject/abi':
     specifier: ^5.7.0
     version: 5.7.0
@@ -76,6 +79,10 @@ devDependencies:
 
 packages:
 
+  /@chainlink/contracts@0.3.1:
+    resolution: {integrity: sha512-A8DRvmfNCwLS1iduPPj7wNAZJMe9/ZimMhoHhbbBiq+7Vq/HFjiNcdoQ5NinFdXD5aTsoNUGG5pAYKj7YMpm9A==}
+    dev: true
+
   /@chainsafe/as-sha256@0.3.1:
     resolution: {integrity: sha512-hldFFYuf49ed7DAakWVXSJODuq3pzJEguD8tQ7h+sGkM18vja+OFoJI9krnGmgzyuZC2ETX0NOIcCTy31v2Mtg==}
     dev: true
@@ -140,6 +147,16 @@ packages:
       semver: 7.5.2
     transitivePeerDependencies:
       - supports-color
+    dev: true
+
+  /@divergencetech/ethier@0.55.0:
+    resolution: {integrity: sha512-pKK6ecbZQW5YN4OiZaxKEFD6KZqSgvaiOuUDX+CF59kpzd8hYeW7Xt7EbMWFoMTW653K222ZxqC5U/qQ4oYGwQ==}
+    dependencies:
+      '@chainlink/contracts': 0.3.1
+      '@openzeppelin/contracts': 4.7.3
+      '@openzeppelin/contracts-upgradeable': 4.7.3
+      erc721a: 4.2.3
+      operator-filter-registry: 1.4.2
     dev: true
 
   /@esbuild/android-arm64@0.17.18:
@@ -1214,6 +1231,18 @@ packages:
       undici: 5.22.1
     transitivePeerDependencies:
       - supports-color
+    dev: true
+
+  /@openzeppelin/contracts-upgradeable@4.7.3:
+    resolution: {integrity: sha512-+wuegAMaLcZnLCJIvrVUDzA9z/Wp93f0Dla/4jJvIhijRrPabjQbZe6fWiECLaJyfn5ci9fqf9vTw3xpQOad2A==}
+    dev: true
+
+  /@openzeppelin/contracts-upgradeable@4.9.2:
+    resolution: {integrity: sha512-siviV3PZV/fHfPaoIC51rf1Jb6iElkYWnNYZ0leO23/ukXuvOyoC/ahy8jqiV7g+++9Nuo3n/rk5ajSN/+d/Sg==}
+    dev: true
+
+  /@openzeppelin/contracts@4.7.3:
+    resolution: {integrity: sha512-dGRS0agJzu8ybo44pCIf3xBaPQN/65AIXNgK8+4gzKd5kbvlqyxryUYVLJv7fK98Seyd2hDZzVEHSWAh0Bt1Yw==}
     dev: true
 
   /@openzeppelin/contracts@4.8.3:
@@ -2358,6 +2387,10 @@ packages:
   /env-paths@2.2.1:
     resolution: {integrity: sha512-+h1lkLKhZMTYjog1VEpJNG7NZJWcuc2DDk/qsqSTRRCOXiLjeQ1d1/udrUGhqMxUgAlwKNZ0cf2uqan5GLuS2A==}
     engines: {node: '>=6'}
+    dev: true
+
+  /erc721a@4.2.3:
+    resolution: {integrity: sha512-0deF0hOOK1XI1Vxv3NKDh2E9sgzRlENuOoexjXRJIRfYCsLlqi9ejl2RF6Wcd9HfH0ldqC03wleQ2WDjxoOUvA==}
     dev: true
 
   /es-abstract@1.21.2:
@@ -4109,6 +4142,13 @@ packages:
     resolution: {integrity: sha512-lNaJgI+2Q5URQBkccEKHTQOPaXdUxnZZElQTZY0MFUAuaEqe1E+Nyvgdz/aIyNi6Z9MzO5dv1H8n58/GELp3+w==}
     dependencies:
       wrappy: 1.0.2
+    dev: true
+
+  /operator-filter-registry@1.4.2:
+    resolution: {integrity: sha512-BwbzpYUtYePAotSV+TMT0r4TU/eGjlhYKohbhu9sf1g/T3KLRMIfUau6bJp8QyLSCBODr6ega34lj4RakbredQ==}
+    dependencies:
+      '@openzeppelin/contracts': 4.8.3
+      '@openzeppelin/contracts-upgradeable': 4.9.2
     dev: true
 
   /optionator@0.8.3:
