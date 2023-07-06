@@ -206,18 +206,16 @@ describe('Toobins', () => {
 		})
 
 		it('should transfer the Toobin to a valid address', async () => {
-			const o1_balanceBefore = await toobins.balanceOf(other1.address)
-			expect(o1_balanceBefore).to.eq(1)
-			const o2_balanceBefore = await toobins.balanceOf(other2.address)
-			expect(o2_balanceBefore).to.eq(0)
+			expect(await toobins.balanceOf(other1.address)).to.eq(1)
+			expect(await toobins.balanceOf(other2.address)).to.eq(0)
 
 			await toobins.connect(other1).pass(other2.address)
 
-			const o1_balanceAfter = await toobins.balanceOf(other1.address)
-			expect(o1_balanceAfter).to.eq(1)
+			expect(await toobins.balanceOf(other1.address)).to.eq(1)
+			expect(await toobins.balanceOf(other2.address)).to.eq(1)
 
-			const o2_balanceAfter = await toobins.balanceOf(other2.address)
-			expect(o2_balanceAfter).to.eq(1)
+			expect(await toobins.ownerOf(0)).to.eq(other2.address)
+			expect(await toobins.ownerOf(1)).to.eq(other1.address)
 		})
 
 		it('should prevent transfers to addresses that already had the Toobin', async () => {
