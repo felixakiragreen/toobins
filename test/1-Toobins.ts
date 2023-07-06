@@ -111,8 +111,8 @@ describe('Toobins', () => {
 
 		toobins = await toobinsFactory.deploy(
 			moonbirds.address,
-			'',
 			fakeDelegationRegistry.address,
+			'',
 		)
 		await toobins.deployed()
 	})
@@ -221,15 +221,15 @@ describe('Toobins', () => {
 		it('should prevent transfers to addresses that already had the Toobin', async () => {
 			await expect(
 				toobins.connect(other2).pass(other1.address),
-			).to.be.revertedWith('This address already receieved Toobins')
+			).to.be.revertedWith('This address already received Toobins')
 
 			// TODO: also need to test for delegates
 		})
 
-		it('should prevent transfers of souldbound Charms', async () => {
+		it('should prevent transfers of Charms', async () => {
 			await expect(
 				toobins.connect(other1).transferFrom(other1.address, other3.address, 1),
-			).to.be.revertedWith('Charms are soulbound and cannot be transferred')
+			).to.be.revertedWith('Charms are address-bound and cannot be transferred')
 		})
 
 		it('should transfer the Toobins to an address with a Moonbird delegate', async () => {
@@ -265,7 +265,7 @@ describe('Toobins', () => {
 		it('should not let a delegate transfer Toobins back to a delegate that has already received Toobins', async () => {
 			await expect(
 				toobins.connect(otherDeleHot2).pass(otherDeleHot1.address),
-			).to.be.revertedWith('This address already receieved Toobins')
+			).to.be.revertedWith('This address already received Toobins')
 		})
 
 		it('should let a delegate transfer the Toobin to a normal wallet', async () => {
