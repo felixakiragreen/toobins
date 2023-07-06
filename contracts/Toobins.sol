@@ -1,73 +1,67 @@
 // SPDX-License-Identifier: CC0-1.0
 pragma solidity ^0.8.18;
 
+import '@divergencetech/ethier/contracts/erc721/BaseTokenURI.sol';
 import '@openzeppelin/contracts/token/ERC721/ERC721.sol';
 import '@openzeppelin/contracts/token/ERC721/IERC721.sol';
 import '@openzeppelin/contracts/access/Ownable.sol';
 import '@openzeppelin/contracts/utils/Strings.sol';
 import './IDelegationRegistry.sol';
 
-contract Toobins is Ownable, ERC721 {
+contract Toobins is ERC721, Ownable, BaseTokenURI {
 	using Strings for uint256;
 
 	constructor(
 		address _moonbirds,
-		string memory _baseTokenURI,
-		address _delegationRegistry
-	) ERC721('Toobins', 'TOOBINS') {
+		address _delegationRegistry,
+		string memory _baseTokenURI
+	) ERC721('Toobins', 'TOOBINS') BaseTokenURI(_baseTokenURI) {
 		moonbirds = _moonbirds;
-		baseTokenURI = _baseTokenURI;
 		delegationRegistry = IDelegationRegistry(_delegationRegistry);
 	}
 
-	address public moonbirds;
-	uint256 public idTracker = 1; // 0 is Toobins
-	string public baseTokenURI;
-	IDelegationRegistry public delegationRegistry;
+	address immutable moonbirds;
+	IDelegationRegistry immutable delegationRegistry;
+	uint256 public idTracker;
 
-	//
-	// ADMIN
-	//
-
-	// note: no check for a moonbird on the initiate
+	/**
+   @notice By minting to owner and then passing, all checks are preserved.
+   */
 	function initiate(address luckyFirst) public onlyOwner {
-		_mint(luckyFirst, 0);
+		assert(idTracker == 0);
+
+		_mint(owner(), idTracker++);
+		pass(luckyFirst);
 	}
 
-	function conclude() public onlyOwner {
-		yoink();
-	}
-
-	// returns the Toobins to the (contract) owner's wallet if it gets stuck
-	// note: charm is minted automatically in _afterTokenTransfer hook
+	/**
+   @notice returns the Toobins to the (contract) owner's wallet if it gets stuck
+	@dev charm is minted automatically in _afterTokenTransfer hook
+   */
 	function yoink() public onlyOwner {
 		_transfer(ownerOf(0), msg.sender, 0);
 	}
 
-	function setBaseTokenURI(string memory _baseTokenURI) public onlyOwner {
-		baseTokenURI = _baseTokenURI;
+	function _baseURI()
+		internal
+		view
+		override(BaseTokenURI, ERC721)
+		returns (string memory)
+	{
+		return baseTokenURI;
 	}
 
-	// VISUAL
-
-	function tokenURI(
-		uint tokenId
-	) public view override returns (string memory) {
-		_requireMinted(tokenId);
-
-		return string(abi.encodePacked(baseTokenURI, tokenId.toString()));
-	}
-
-	// TRANSFER
-
-	// the primary transfer function
-	// (doesn't require `from` or `tokenId`)
+	/**
+   @notice primary transfer function
+	@dev (doesn't require `from` or `tokenId`)
+   */
 	function pass(address to) public {
-		transferFrom(msg.sender, to, 0);
+		safeTransferFrom(msg.sender, to, 0);
 	}
 
-	// instead of overriding ERC-721 we can use hooks
-
+	/**
+	@dev use hooks instead of overriding ERC-721 transfer functions
+   */
 	function _beforeTokenTransfer(
 		address from,
 		address to,
@@ -82,11 +76,14 @@ contract Toobins is Ownable, ERC721 {
 			return;
 		}
 
-		require(tokenId == 0, 'Charms are soulbound and cannot be transferred');
-		require(balanceOf(to) == 0, 'This address already receieved Toobins');
+		require(
+			tokenId == 0,
+			'Charms are address-bound and cannot be transferred'
+		);
+		require(balanceOf(to) == 0, 'This address already received Toobins');
 		// TODO: add check for Toobins Charms in the Vault
 		require(
-			hasMoonbird(to) || checkForMoonbirdsVault(to) != address(0),
+			_hasMoonbird(to) || _checkForMoonbirdsVault(to) != address(0),
 			'Toobins can only be transferred to an address with a Moonbird'
 		);
 	}
@@ -106,8 +103,8 @@ contract Toobins is Ownable, ERC721 {
 		// @review This is to keep with the functionality as currently implemented, for demonstration purposes,
 		// but see other comments around expected behaviour.
 		address mintTo = from;
-		if (!hasMoonbird(mintTo)) {
-			mintTo = checkForMoonbirdsVault(from);
+		if (!_hasMoonbird(mintTo)) {
+			mintTo = _checkForMoonbirdsVault(from);
 		}
 		if (mintTo != address(0)) {
 			_mint(mintTo, idTracker++); // do NOT use safeMint as this allowed the Wriggler exploit
@@ -118,15 +115,17 @@ contract Toobins is Ownable, ERC721 {
 	// transfer checks with delegation
 	//
 
-	function hasMoonbird(address owner) internal view returns (bool) {
+	function _hasMoonbird(address owner) internal view returns (bool) {
 		return IERC721(moonbirds).balanceOf(owner) > 0;
 	}
 
-	function delegateHasMoonbird(address delegate) internal view returns (bool) {
-		return checkForMoonbirdsVault(delegate) != address(0);
+	function _delegateHasMoonbird(
+		address delegate
+	) internal view returns (bool) {
+		return _checkForMoonbirdsVault(delegate) != address(0);
 	}
 
-	function checkForMoonbirdsVault(
+	function _checkForMoonbirdsVault(
 		address delegate
 	) internal view returns (address) {
 		IDelegationRegistry.DelegationInfo[]
@@ -136,7 +135,9 @@ contract Toobins is Ownable, ERC721 {
 		for (uint i = 0; i < delegateInfos.length; i++) {
 			IDelegationRegistry.DelegationInfo memory info = delegateInfos[i];
 
-			if (hasMoonbird(info.vault)) {
+			// TODO: filter delegations
+
+			if (_hasMoonbird(info.vault)) {
 				return info.vault;
 			}
 		}
