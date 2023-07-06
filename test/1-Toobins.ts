@@ -66,7 +66,28 @@ describe('Toobins', () => {
 			if (delegateAddress === otherDeleHot1.address) {
 				return [
 					[
-						1,
+						0, // NONE
+						otherDeleCold1.address,
+						otherDeleHot1.address,
+						'0x0000000000000000000000000000000000000000',
+						BigNumber.from(0),
+					],
+					[
+						3, // TOKEN
+						otherDeleCold1.address,
+						otherDeleHot1.address,
+						DELEGATION_REGISTRY,
+						BigNumber.from(0),
+					],
+					[
+						2, // CONTRACT
+						otherDeleCold1.address,
+						otherDeleHot1.address,
+						DELEGATION_REGISTRY,
+						BigNumber.from(0),
+					],
+					[
+						1, // ALL
 						otherDeleCold1.address,
 						otherDeleHot1.address,
 						'0x0000000000000000000000000000000000000000',
@@ -78,7 +99,28 @@ describe('Toobins', () => {
 			if (delegateAddress === otherDeleHot2.address) {
 				return [
 					[
-						1,
+						0, // NONE
+						otherDeleCold2.address,
+						otherDeleHot2.address,
+						'0x0000000000000000000000000000000000000000',
+						BigNumber.from(0),
+					],
+					[
+						3, // TOKEN
+						otherDeleCold2.address,
+						otherDeleHot2.address,
+						DELEGATION_REGISTRY,
+						BigNumber.from(0),
+					],
+					[
+						2, // CONTRACT
+						otherDeleCold2.address,
+						otherDeleHot2.address,
+						DELEGATION_REGISTRY,
+						BigNumber.from(0),
+					],
+					[
+						1, // ALL
 						otherDeleCold2.address,
 						otherDeleHot2.address,
 						'0x0000000000000000000000000000000000000000',
@@ -305,6 +347,12 @@ describe('Toobins', () => {
 
 			expect(await toobins.balanceOf(owner.address)).to.eq(1)
 			expect(await toobins.balanceOf(other2.address)).to.eq(1)
+		})
+
+		it('should prevent others from yoinking', async () => {
+			await expect(toobins.connect(other1).yoink()).to.be.revertedWith(
+				'Ownable: caller is not the owner',
+			)
 		})
 
 		it('should leave behind a Charm for the owner', async () => {
