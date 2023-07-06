@@ -9,8 +9,10 @@ contract MockMoonbirds is ERC721 {
 	uint public idTracker;
 
 	function mint() public {
-		_safeMint(msg.sender, idTracker);
+		_mint(msg.sender, idTracker++);
+	}
 
-		idTracker++;
+	function mintTo(address to) public {
+		_mint(to, idTracker++);
 	}
 }
