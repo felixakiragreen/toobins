@@ -188,7 +188,7 @@ describe('Toobins', () => {
 					AddressZero,
 					0,
 				),
-			).to.be.revertedWith('ERC721: address zero is not a valid owner')
+			).to.be.revertedWith('ERC721: transfer to the zero address')
 		})
 
 		it('should prevent transfers from non-holders', async () => {
