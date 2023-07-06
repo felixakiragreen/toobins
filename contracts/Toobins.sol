@@ -123,7 +123,7 @@ contract Toobins is ERC721, Ownable, BaseTokenURI {
 			memory delegateInfos = IDelegationRegistry(delegationRegistry)
 				.getDelegationsByDelegate(delegate);
 
-		for (uint i = 0; i < delegateInfos.length; i++) {
+		for (uint256 i = 0; i < delegateInfos.length; i++) {
 			IDelegationRegistry.DelegationInfo memory info = delegateInfos[i];
 
 			// Filter out delegations that are not relevant to Moonbirds
