@@ -113,16 +113,8 @@ contract Toobins is ERC721, Ownable, BaseTokenURI {
 	}
 
 	/**
-	@notice Checks an address to see if any delegates have a Moonbird.
-	*/
-	function _delegateHasMoonbird(
-		address delegate
-	) internal view returns (bool) {
-		return _checkForMoonbirdsVault(delegate) != address(0);
-	}
-
-	/**
-	@notice Returns any delegates relevant to Moonbirds.
+	@notice Checks an address for any delegates relevant to Moonbirds.
+	@return The first Moonbirds vault found, or address(0) if none found.
 	*/
 	function _checkForMoonbirdsVault(
 		address delegate
