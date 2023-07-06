@@ -1,0 +1,29 @@
+REVIEW:
+   [x] nit: Use explicit types (i.e. uint256). Applies to all `uint` in this file.
+   [x] nit: should be immutable to safe gas loading it from contract bytecode instead of storage.
+   [x] This should be a standard mint to save gas.
+   [x] remove this function since it is identical to yoink.
+   [x] override `_baseURI()` instead of `tokenURI()`.
+   [-] Must be replaced by `_exists` as `tokenURI` has to revert for potentially burnt tokens. Already resolved by overriding `_baseURI()` isntead of `tokenURI()` (see comment above).
+   [x] nit: Should be prefixed with _ for consistency (internal function)
+   [x] CRITICAL This is a very complicated way to solve a relatively simple problem: In the Wriggler exploit they sent the worm to a contract that reverts if a charm is minted to it, therefore locking the worm indefinitely as a successful yoink would require the the mint to of a charm to succeed. The exploit contract is only aware of the mint because `_safeMint()` is used, which performs a callback that hands control to the malicious contract allowing it to revert. Replacing `_safeMint` with `_mint` protects against this exploit as it does not perform the callback. This replacement is safe because we already know that the current wallet is a ERC721Receiver, otherwise it could not have received the worm in the first place. `externalMint` should therefore be removed entirely.
+   [x] CRITICAL The try/catch does not fully resolve the issue. See `Exploiter.sol` for another griefing mechanism that doesn't lock the worm, but requires a full block of gas to `yoink()` it.
+   [x] CEI violation. But see comment above about replacing it with `_mint` .
+   [x] See also the comment in `_requireBasicTransferChecks` further below. At this point it is not guaranteed that `to` (i.e. the receiver of a charm) has not already gotten one. This case needs to be excluded. See also comment below regarding changing who receives the charm.
+   [-] This forces all transfers to be safe. But given that the worm is the only token that will ever be transferred and we actually want it to never end up in a non-ERC721Receiver it's ok.
+   [x] The charm must not be minted to the `msg.sender` as this might be an approved address. It should be minted to the current holder of the worm, i.e. `from`, instead.
+   [x] If a single hot wallet is delegated by multiple vaults containing Moonbirds, the charm can only ever be minted to the first one. We recommend to change the logic so that the hot wallet (i.e. the current holder of the worm) will also get the charm (which conceptually also makes more sense as it was the wallet touched by the worm). Users can always send the worm directly to their vault if they want to get a charm on there too.
+   [x] nit: Should be preficed with _ for consistency (internal function)
+   [x] redundant. already checked in `safeTransferFrom` (only caller of _pass -> handleTransfer)
+   [x] CRITICAL: no owner/approval checks were performed at this point!! This means that anyone can move the worm.
+   [x] nit: Should be preficed with _ for consistency (internal function)
+   [-] nit: From an outside perspective, this function should return false if a token cannot be transferred instead of reverting.
+   [x] This require can never be broken and should therefore be an assert
+   [x] Charms are address-bound not soulbound.
+   [x] nit: Typo `receieved` -> `received`
+   [x] CRITICAL This information is not correct given that `to` (i.e. the receiver of the worm) might not be the receiver of the charms given the current treatment of delegation. The worm can therefore be sent to the same delegate multiple times to mint multiple charms to the same delegating vault.
+   [-] nit: Should be `require(false, ...)` since it should always revert if reached (which it does given the early return above).
+   [x] nit: Should be preficed with _ for consistency (internal function)
+   [-] nit: Should be preficed with _ for consistency (internal function)
+   [x] nit: Should be preficed with _ for consistency (internal function)
+   [x] The returned delegations must be filtered for Moonbird ones. At the moment any kind of delegation can be used. E.g. if a MB holding vault delegates operations for BAYC to a hot wallet, the same wallet can also receive the worm in our case even though the vault never gave explicit approval of that. This can cause unintended behaviour and is an issue for liquid delegation markets.
