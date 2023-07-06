@@ -233,10 +233,8 @@ describe('Toobins', () => {
 		})
 
 		it('should transfer the Toobins to an address with a Moonbird delegate', async () => {
-			const o2_balanceBefore = await toobins.balanceOf(other2.address)
-			expect(o2_balanceBefore).to.eq(1)
-			const oDH_balanceBefore = await toobins.balanceOf(otherDeleHot1.address)
-			expect(oDH_balanceBefore).to.eq(0)
+			expect(await toobins.balanceOf(other2.address)).to.eq(1)
+			expect(await toobins.balanceOf(otherDeleHot1.address)).to.eq(0)
 
 			await toobins
 				.connect(other2)
@@ -246,41 +244,35 @@ describe('Toobins', () => {
 					0,
 				)
 
-			const o2_balanceAfter = await toobins.balanceOf(other2.address)
-			expect(o2_balanceAfter).to.eq(1)
+			expect(await toobins.balanceOf(other2.address)).to.eq(1)
+			expect(await toobins.balanceOf(otherDeleHot1.address)).to.eq(1)
 
-			const oDH_balanceAfter = await toobins.balanceOf(otherDeleHot1.address)
-			expect(oDH_balanceAfter).to.eq(1)
+			expect(await toobins.ownerOf(0)).to.eq(otherDeleHot1.address)
+			expect(await toobins.ownerOf(2)).to.eq(other2.address)
 		})
 
 		it('should let a delegate transfer the Toobin to a delegate', async () => {
 			expect(await toobins.balanceOf(otherDeleHot1.address)).to.eq(1)
 			expect(await toobins.balanceOf(otherDeleHot2.address)).to.eq(0)
 
-			await toobins
-				.connect(otherDeleHot1)
-				['safeTransferFrom(address,address,uint256)'](
-					otherDeleHot1.address,
-					otherDeleHot2.address,
-					0,
-				)
+			await toobins.connect(otherDeleHot1).pass(otherDeleHot2.address)
 
 			expect(await toobins.balanceOf(otherDeleHot1.address)).to.eq(0) // should no longer have a Toobin
 			expect(await toobins.balanceOf(otherDeleCold1.address)).to.eq(1) // should have a Charm
 			expect(await toobins.balanceOf(otherDeleHot2.address)).to.eq(1) // has Toobin now
 		})
 
+		it('should not let a delegate transfer Toobins back to a delegate that has already received Toobins', async () => {
+			await expect(
+				toobins.connect(otherDeleHot2).pass(otherDeleHot1.address),
+			).to.be.revertedWith('This address already receieved Toobins')
+		})
+
 		it('should let a delegate transfer the Toobin to a normal wallet', async () => {
 			expect(await toobins.balanceOf(otherDeleHot2.address)).to.eq(1)
 			expect(await toobins.balanceOf(other4.address)).to.eq(0)
 
-			await toobins
-				.connect(otherDeleHot2)
-				['safeTransferFrom(address,address,uint256)'](
-					otherDeleHot2.address,
-					other4.address,
-					0,
-				)
+			await toobins.connect(otherDeleHot2).pass(other4.address)
 
 			expect(await toobins.balanceOf(otherDeleHot2.address)).to.eq(0) // should no longer has Toobin
 			expect(await toobins.balanceOf(otherDeleCold2.address)).to.eq(1) // should have a Charm
@@ -290,11 +282,9 @@ describe('Toobins', () => {
 
 	describe('VISUAL', async () => {
 		it('should return the token URI for a token', async () => {
-			const tokenURI_0 = await toobins.tokenURI(0)
-			expect(tokenURI_0).to.eq(`${BASE_TOKEN_URI}0`)
+			expect(await toobins.tokenURI(0)).to.eq(`${BASE_TOKEN_URI}0`)
 
-			const tokenURI_1 = await toobins.tokenURI(1)
-			expect(tokenURI_1).to.eq(`${BASE_TOKEN_URI}1`)
+			expect(await toobins.tokenURI(1)).to.eq(`${BASE_TOKEN_URI}1`)
 		})
 
 		it('should not return token URI for an invalid token', async () => {
