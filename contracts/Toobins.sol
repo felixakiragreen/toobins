@@ -53,8 +53,7 @@ contract Toobins is ERC721, Ownable, BaseTokenURI {
 	}
 
 	/**
-   @notice Convenience Transfer function.
-	@dev Doesn't require `from` or `tokenId`.
+   @notice Convenience Transfer function (without `from` or `tokenId`.)
    */
 	function pass(address to) public {
 		safeTransferFrom(msg.sender, to, 0);
