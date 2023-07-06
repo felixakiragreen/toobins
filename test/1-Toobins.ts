@@ -9,18 +9,12 @@ import {
 	IDelegationRegistry,
 } from '../typechain'
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers'
-import {
-	impersonateAccount,
-	stopImpersonatingAccount,
-	setBalance,
-} from '@nomicfoundation/hardhat-network-helpers'
 
 import { FakeContract, smock } from '@defi-wonderland/smock'
 import { BigNumber } from 'ethers'
 
 const { expect } = chai
 const { constants, utils } = ethers
-const { parseEther, getAddress } = utils
 const { AddressZero } = constants
 
 chai.should() // if you like should syntax
@@ -162,10 +156,16 @@ describe('Toobins', () => {
 	})
 
 	describe('ADMIN', async () => {
-		it('should prevents others from initiating the run', async () => {
+		it('should prevents others from initiating run', async () => {
 			await expect(
 				toobins.connect(other1).initiate(other1.address),
 			).to.be.revertedWith('Ownable: caller is not the owner')
+		})
+
+		it('should prevent owner from initiating run with an invalid address', async () => {
+			await expect(toobins.initiate(other5.address)).to.be.revertedWith(
+				'Toobins can only be transferred to an address with a Moonbird',
+			)
 		})
 
 		it('should allow owner to initiate the run', async () => {
@@ -176,6 +176,10 @@ describe('Toobins', () => {
 
 			const balanceAfter = await toobins.balanceOf(other1.address)
 			expect(balanceAfter).to.eq(1)
+		})
+
+		it('should prevent owner from initiating run if already started', async () => {
+			await expect(toobins.initiate(other1.address)).to.be.reverted
 		})
 	})
 
@@ -222,8 +226,6 @@ describe('Toobins', () => {
 			await expect(
 				toobins.connect(other2).pass(other1.address),
 			).to.be.revertedWith('This address already received Toobins')
-
-			// TODO: also need to test for delegates
 		})
 
 		it('should prevent transfers of Charms', async () => {
@@ -257,8 +259,8 @@ describe('Toobins', () => {
 
 			await toobins.connect(otherDeleHot1).pass(otherDeleHot2.address)
 
-			expect(await toobins.balanceOf(otherDeleHot1.address)).to.eq(0) // should no longer have a Toobin
-			expect(await toobins.balanceOf(otherDeleCold1.address)).to.eq(1) // should have a Charm
+			expect(await toobins.balanceOf(otherDeleHot1.address)).to.eq(1) // UPDATED: now should have a Charm
+			expect(await toobins.balanceOf(otherDeleCold1.address)).to.eq(0) // UPDATED: now should no longer have a Charm
 			expect(await toobins.balanceOf(otherDeleHot2.address)).to.eq(1) // has Toobin now
 		})
 
@@ -274,8 +276,8 @@ describe('Toobins', () => {
 
 			await toobins.connect(otherDeleHot2).pass(other4.address)
 
-			expect(await toobins.balanceOf(otherDeleHot2.address)).to.eq(0) // should no longer has Toobin
-			expect(await toobins.balanceOf(otherDeleCold2.address)).to.eq(1) // should have a Charm
+			expect(await toobins.balanceOf(otherDeleHot2.address)).to.eq(1) // UPDATED: now should have a Charm
+			expect(await toobins.balanceOf(otherDeleCold2.address)).to.eq(0) // UPDATED: should no longer have a Charm
 			expect(await toobins.balanceOf(other4.address)).to.eq(1) // has Toobin now
 		})
 	})
@@ -296,38 +298,21 @@ describe('Toobins', () => {
 
 	describe('ADMIN', async () => {
 		it('should let the owner yoink the Toobin', async () => {
-			const owner_balanceBefore = await toobins.balanceOf(owner.address)
-			expect(owner_balanceBefore).to.eq(0)
-			const o2_balanceBefore = await toobins.balanceOf(other2.address)
-			expect(o2_balanceBefore).to.eq(1)
+			expect(await toobins.balanceOf(owner.address)).to.eq(0)
+			expect(await toobins.balanceOf(other2.address)).to.eq(1)
 
 			await toobins.yoink()
 
-			const owner_balanceAfter = await toobins.balanceOf(owner.address)
-			expect(owner_balanceAfter).to.eq(1)
-
-			const o2_balanceAfter = await toobins.balanceOf(other2.address)
-			expect(o2_balanceAfter).to.eq(1)
+			expect(await toobins.balanceOf(owner.address)).to.eq(1)
+			expect(await toobins.balanceOf(other2.address)).to.eq(1)
 		})
 
-		it('should not leave behind a Charm for the owner', async () => {
-			const owner_balanceBefore = await toobins.balanceOf(owner.address)
-			expect(owner_balanceBefore).to.eq(1)
+		it('should leave behind a Charm for the owner', async () => {
+			expect(await toobins.balanceOf(owner.address)).to.eq(1)
 
 			await toobins.pass(other3.address)
 
-			const owner_balanceAfter = await toobins.balanceOf(owner.address)
-			expect(owner_balanceAfter).to.eq(0)
-		})
-
-		it('should allow the owner to conclude the run', async () => {
-			const balanceBefore = await toobins.balanceOf(owner.address)
-			expect(balanceBefore).to.eq(0)
-
-			await toobins.conclude()
-
-			const balanceAfter = await toobins.balanceOf(owner.address)
-			expect(balanceAfter).to.eq(1)
+			expect(await toobins.balanceOf(owner.address)).to.eq(1)
 		})
 	})
 })
