@@ -25,7 +25,7 @@ contract Toobins is ERC721, Ownable, BaseTokenURI {
 	uint256 public idTracker;
 
 	/**
-   @notice Calling `_beforeTokenTransfer` from owner preseveres all checks,
+   @notice Calling `_beforeTokenTransfer` from owner preserves all checks,
 	but this can be removed to skip them.
    */
 	function initiate(address luckyFirst) public onlyOwner {
