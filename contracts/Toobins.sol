@@ -36,8 +36,8 @@ contract Toobins is ERC721, Ownable, BaseTokenURI {
 	}
 
 	/**
-   @notice Returns the Toobins to the owner's wallet if it gets stuck.
-	@dev Charm is minted automatically in _afterTokenTransfer hook.
+   @notice Returns Toobins to the owner.
+	@dev Charm is minted automatically in `_afterTokenTransfer` hook.
    */
 	function yoink() public onlyOwner {
 		_transfer(ownerOf(0), msg.sender, 0);
@@ -92,6 +92,8 @@ contract Toobins is ERC721, Ownable, BaseTokenURI {
 
 	/**
 	@notice This is where the mint happens after a transfer.
+	The Charm is always minted in the same wallet that received Toobins.
+	This follows the path of the Toobins, even if it was a delegate.
 	@dev Does NOT use `_safeMint` as this allowed the Wriggler exploit.
 	*/
 	function _afterTokenTransfer(
