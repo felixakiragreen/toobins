@@ -20,8 +20,12 @@ export type { ERC165 } from "./@openzeppelin/contracts/utils/introspection/ERC16
 export { ERC165__factory } from "./factories/@openzeppelin/contracts/utils/introspection/ERC165__factory";
 export type { IERC165 } from "./@openzeppelin/contracts/utils/introspection/IERC165";
 export { IERC165__factory } from "./factories/@openzeppelin/contracts/utils/introspection/IERC165__factory";
-export type { Exploiter } from "./contracts/Exploiter";
-export { Exploiter__factory } from "./factories/contracts/Exploiter__factory";
+export type { Exploiter } from "./contracts/ExploitGas.sol/Exploiter";
+export { Exploiter__factory } from "./factories/contracts/ExploitGas.sol/Exploiter__factory";
+export type { ExploitGas } from "./contracts/ExploitGas.sol/ExploitGas";
+export { ExploitGas__factory } from "./factories/contracts/ExploitGas.sol/ExploitGas__factory";
+export type { ExploitYoink } from "./contracts/ExploitYoink";
+export { ExploitYoink__factory } from "./factories/contracts/ExploitYoink__factory";
 export type { IDelegationRegistry } from "./contracts/IDelegationRegistry";
 export { IDelegationRegistry__factory } from "./factories/contracts/IDelegationRegistry__factory";
 export type { MockMoonbirds } from "./contracts/MockMoonbirds";

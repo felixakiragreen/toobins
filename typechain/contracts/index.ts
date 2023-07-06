@@ -3,7 +3,7 @@
 /* eslint-disable */
 import type * as exploitGasSol from "./ExploitGas.sol";
 export type { exploitGasSol };
-export type { Exploiter } from "./Exploiter";
+export type { ExploitYoink } from "./ExploitYoink";
 export type { IDelegationRegistry } from "./IDelegationRegistry";
 export type { MockMoonbirds } from "./MockMoonbirds";
 export type { Toobins } from "./Toobins";

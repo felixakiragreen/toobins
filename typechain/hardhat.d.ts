@@ -45,9 +45,13 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Exploiter__factory>;
     getContractFactory(
-      name: "Exploiter",
+      name: "ExploitGas",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.Exploiter__factory>;
+    ): Promise<Contracts.ExploitGas__factory>;
+    getContractFactory(
+      name: "ExploitYoink",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ExploitYoink__factory>;
     getContractFactory(
       name: "IDelegationRegistry",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -102,10 +106,15 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.Exploiter>;
     getContractAt(
-      name: "Exploiter",
+      name: "ExploitGas",
       address: string,
       signer?: ethers.Signer
-    ): Promise<Contracts.Exploiter>;
+    ): Promise<Contracts.ExploitGas>;
+    getContractAt(
+      name: "ExploitYoink",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ExploitYoink>;
     getContractAt(
       name: "IDelegationRegistry",
       address: string,

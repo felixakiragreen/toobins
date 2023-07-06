@@ -2,7 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export * as exploitGasSol from "./ExploitGas.sol";
-export { Exploiter__factory } from "./Exploiter__factory";
+export { ExploitYoink__factory } from "./ExploitYoink__factory";
 export { IDelegationRegistry__factory } from "./IDelegationRegistry__factory";
 export { MockMoonbirds__factory } from "./MockMoonbirds__factory";
 export { Toobins__factory } from "./Toobins__factory";
