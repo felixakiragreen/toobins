@@ -32,10 +32,8 @@ export interface ToobinsInterface extends utils.Interface {
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
     "baseTokenURI()": FunctionFragment;
-    "canTransfer(address,uint256)": FunctionFragment;
     "conclude()": FunctionFragment;
     "delegationRegistry()": FunctionFragment;
-    "externalMint(address)": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
     "idTracker()": FunctionFragment;
     "initiate(address)": FunctionFragment;
@@ -63,10 +61,8 @@ export interface ToobinsInterface extends utils.Interface {
       | "approve"
       | "balanceOf"
       | "baseTokenURI"
-      | "canTransfer"
       | "conclude"
       | "delegationRegistry"
-      | "externalMint"
       | "getApproved"
       | "idTracker"
       | "initiate"
@@ -101,18 +97,10 @@ export interface ToobinsInterface extends utils.Interface {
     functionFragment: "baseTokenURI",
     values?: undefined
   ): string;
-  encodeFunctionData(
-    functionFragment: "canTransfer",
-    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
-  ): string;
   encodeFunctionData(functionFragment: "conclude", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "delegationRegistry",
     values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "externalMint",
-    values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "getApproved",
@@ -196,17 +184,9 @@ export interface ToobinsInterface extends utils.Interface {
     functionFragment: "baseTokenURI",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "canTransfer",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "conclude", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "delegationRegistry",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "externalMint",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -361,22 +341,11 @@ export interface Toobins extends BaseContract {
 
     baseTokenURI(overrides?: CallOverrides): Promise<[string]>;
 
-    canTransfer(
-      to: PromiseOrValue<string>,
-      tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
-
     conclude(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     delegationRegistry(overrides?: CallOverrides): Promise<[string]>;
-
-    externalMint(
-      to: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
 
     getApproved(
       tokenId: PromiseOrValue<BigNumberish>,
@@ -427,7 +396,7 @@ export interface Toobins extends BaseContract {
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
       tokenId: PromiseOrValue<BigNumberish>,
-      _data: PromiseOrValue<BytesLike>,
+      data: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -484,22 +453,11 @@ export interface Toobins extends BaseContract {
 
   baseTokenURI(overrides?: CallOverrides): Promise<string>;
 
-  canTransfer(
-    to: PromiseOrValue<string>,
-    tokenId: PromiseOrValue<BigNumberish>,
-    overrides?: CallOverrides
-  ): Promise<boolean>;
-
   conclude(
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   delegationRegistry(overrides?: CallOverrides): Promise<string>;
-
-  externalMint(
-    to: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
 
   getApproved(
     tokenId: PromiseOrValue<BigNumberish>,
@@ -550,7 +508,7 @@ export interface Toobins extends BaseContract {
     from: PromiseOrValue<string>,
     to: PromiseOrValue<string>,
     tokenId: PromiseOrValue<BigNumberish>,
-    _data: PromiseOrValue<BytesLike>,
+    data: PromiseOrValue<BytesLike>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -607,20 +565,9 @@ export interface Toobins extends BaseContract {
 
     baseTokenURI(overrides?: CallOverrides): Promise<string>;
 
-    canTransfer(
-      to: PromiseOrValue<string>,
-      tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
     conclude(overrides?: CallOverrides): Promise<void>;
 
     delegationRegistry(overrides?: CallOverrides): Promise<string>;
-
-    externalMint(
-      to: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
 
     getApproved(
       tokenId: PromiseOrValue<BigNumberish>,
@@ -666,7 +613,7 @@ export interface Toobins extends BaseContract {
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
       tokenId: PromiseOrValue<BigNumberish>,
-      _data: PromiseOrValue<BytesLike>,
+      data: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -766,22 +713,11 @@ export interface Toobins extends BaseContract {
 
     baseTokenURI(overrides?: CallOverrides): Promise<BigNumber>;
 
-    canTransfer(
-      to: PromiseOrValue<string>,
-      tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     conclude(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     delegationRegistry(overrides?: CallOverrides): Promise<BigNumber>;
-
-    externalMint(
-      to: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
 
     getApproved(
       tokenId: PromiseOrValue<BigNumberish>,
@@ -832,7 +768,7 @@ export interface Toobins extends BaseContract {
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
       tokenId: PromiseOrValue<BigNumberish>,
-      _data: PromiseOrValue<BytesLike>,
+      data: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -890,23 +826,12 @@ export interface Toobins extends BaseContract {
 
     baseTokenURI(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    canTransfer(
-      to: PromiseOrValue<string>,
-      tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
     conclude(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     delegationRegistry(
       overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    externalMint(
-      to: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     getApproved(
@@ -958,7 +883,7 @@ export interface Toobins extends BaseContract {
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
       tokenId: PromiseOrValue<BigNumberish>,
-      _data: PromiseOrValue<BytesLike>,
+      data: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
