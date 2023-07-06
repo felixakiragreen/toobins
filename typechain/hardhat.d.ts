@@ -41,10 +41,6 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IERC165__factory>;
     getContractFactory(
-      name: "Exploiter",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.Exploiter__factory>;
-    getContractFactory(
       name: "ExploitGas",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.ExploitGas__factory>;
@@ -64,6 +60,10 @@ declare module "hardhat/types/runtime" {
       name: "Toobins",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Toobins__factory>;
+    getContractFactory(
+      name: "ToobinsWithExploitableYoink",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ToobinsWithExploitableYoink__factory>;
 
     getContractAt(
       name: "Ownable",
@@ -101,11 +101,6 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.IERC165>;
     getContractAt(
-      name: "Exploiter",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.Exploiter>;
-    getContractAt(
       name: "ExploitGas",
       address: string,
       signer?: ethers.Signer
@@ -130,6 +125,11 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.Toobins>;
+    getContractAt(
+      name: "ToobinsWithExploitableYoink",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ToobinsWithExploitableYoink>;
 
     // default types
     getContractFactory(

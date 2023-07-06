@@ -20,10 +20,8 @@ export type { ERC165 } from "./@openzeppelin/contracts/utils/introspection/ERC16
 export { ERC165__factory } from "./factories/@openzeppelin/contracts/utils/introspection/ERC165__factory";
 export type { IERC165 } from "./@openzeppelin/contracts/utils/introspection/IERC165";
 export { IERC165__factory } from "./factories/@openzeppelin/contracts/utils/introspection/IERC165__factory";
-export type { Exploiter } from "./contracts/ExploitGas.sol/Exploiter";
-export { Exploiter__factory } from "./factories/contracts/ExploitGas.sol/Exploiter__factory";
-export type { ExploitGas } from "./contracts/ExploitGas.sol/ExploitGas";
-export { ExploitGas__factory } from "./factories/contracts/ExploitGas.sol/ExploitGas__factory";
+export type { ExploitGas } from "./contracts/ExploitGas";
+export { ExploitGas__factory } from "./factories/contracts/ExploitGas__factory";
 export type { ExploitYoink } from "./contracts/ExploitYoink";
 export { ExploitYoink__factory } from "./factories/contracts/ExploitYoink__factory";
 export type { IDelegationRegistry } from "./contracts/IDelegationRegistry";
@@ -32,3 +30,5 @@ export type { MockMoonbirds } from "./contracts/MockMoonbirds";
 export { MockMoonbirds__factory } from "./factories/contracts/MockMoonbirds__factory";
 export type { Toobins } from "./contracts/Toobins";
 export { Toobins__factory } from "./factories/contracts/Toobins__factory";
+export type { ToobinsWithExploitableYoink } from "./contracts/ToobinsExploitYoink.sol/ToobinsWithExploitableYoink";
+export { ToobinsWithExploitableYoink__factory } from "./factories/contracts/ToobinsExploitYoink.sol/ToobinsWithExploitableYoink__factory";
