@@ -84,6 +84,7 @@ contract Toobins is Ownable, ERC721 {
 
 		require(tokenId == 0, 'Charms are soulbound and cannot be transferred');
 		require(balanceOf(to) == 0, 'This address already receieved Toobins');
+		// TODO: add check for Toobins Charms in the Vault
 		require(
 			hasMoonbird(to) || checkForMoonbirdsVault(to) != address(0),
 			'Toobins can only be transferred to an address with a Moonbird'
