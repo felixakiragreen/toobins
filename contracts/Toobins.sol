@@ -25,18 +25,19 @@ contract Toobins is ERC721, Ownable, BaseTokenURI {
 	uint256 public idTracker;
 
 	/**
-   @notice By calling the beforeTokenHook from owner, all checks are preserved.
+   @notice Calling `_beforeTokenTransfer` from owner preseveres all checks,
+	but this can be removed to skip them.
    */
 	function initiate(address luckyFirst) public onlyOwner {
 		assert(idTracker == 0);
 
-		_beforeTokenTransfer(owner(), luckyFirst, idTracker, 1);
+		_beforeTokenTransfer(msg.sender, luckyFirst, idTracker, 1);
 		_mint(luckyFirst, idTracker++);
 	}
 
 	/**
-   @notice Returns the Toobins to the (contract) owner's wallet if it gets stuck
-	@dev Charm is minted automatically in _afterTokenTransfer hook
+   @notice Returns the Toobins to the owner's wallet if it gets stuck.
+	@dev Charm is minted automatically in _afterTokenTransfer hook.
    */
 	function yoink() public onlyOwner {
 		_transfer(ownerOf(0), msg.sender, 0);
@@ -52,28 +53,29 @@ contract Toobins is ERC721, Ownable, BaseTokenURI {
 	}
 
 	/**
-   @notice Convenience Transfer function
-	@dev (Doesn't require `from` or `tokenId`)
+   @notice Convenience Transfer function.
+	@dev Doesn't require `from` or `tokenId`
    */
 	function pass(address to) public {
 		safeTransferFrom(msg.sender, to, 0);
 	}
 
 	/**
-	@notice This is where the transfer checks happen
-	@dev Using hooks instead of overriding ERC-721 transfer functions
+	@notice This is where the transfer checks happen.
+	@dev Using hooks instead of overriding ERC-721 transfer functions.
    */
 	function _beforeTokenTransfer(
 		address from,
 		address to,
 		uint256 tokenId,
-		uint256 batchSize
+		uint256
 	) internal virtual override {
-		assert(batchSize == 1); // TODO: check if assert is necessary
-		// since OpenZeppelin always calls with 1
-
-		if (from == address(0) || to == owner()) {
-			// mints are always allowed and we don't stop the owner from yoinking
+		if (
+			// Always allow mints
+			from == address(0) ||
+			// Skip checks when owner yoinks
+			to == owner()
+		) {
 			return;
 		}
 
@@ -89,31 +91,39 @@ contract Toobins is ERC721, Ownable, BaseTokenURI {
 	}
 
 	/**
-	@notice This is where the mint happens after a transfer
+	@notice This is where the mint happens after a transfer.
+	@dev Does NOT use `_safeMint` as this allowed the Wriggler exploit.
 	*/
 	function _afterTokenTransfer(
 		address from,
 		address,
 		uint256,
-		uint256 batchSize
+		uint256
 	) internal virtual override {
-		assert(batchSize == 1);
-
 		if (from != address(0)) {
-			_mint(from, idTracker++); // do NOT use safeMint as this allowed the Wriggler exploit
+			_mint(from, idTracker++);
 		}
 	}
 
+	/**
+	@notice Checks an address to see if it has a Moonbird.
+	*/
 	function _hasMoonbird(address owner) internal view returns (bool) {
 		return IERC721(moonbirds).balanceOf(owner) > 0;
 	}
 
+	/**
+	@notice Checks an address to see if any delegates have a Moonbird.
+	*/
 	function _delegateHasMoonbird(
 		address delegate
 	) internal view returns (bool) {
 		return _checkForMoonbirdsVault(delegate) != address(0);
 	}
 
+	/**
+	@notice Returns any delegates relevant to Moonbirds.
+	*/
 	function _checkForMoonbirdsVault(
 		address delegate
 	) internal view returns (address) {
