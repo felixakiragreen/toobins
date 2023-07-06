@@ -25,18 +25,18 @@ contract Toobins is ERC721, Ownable, BaseTokenURI {
 	uint256 public idTracker;
 
 	/**
-   @notice By minting to owner and then passing, all checks are preserved.
+   @notice By calling the beforeTokenHook from owner, all checks are preserved.
    */
 	function initiate(address luckyFirst) public onlyOwner {
 		assert(idTracker == 0);
 
-		_mint(owner(), idTracker++);
-		pass(luckyFirst);
+		_beforeTokenTransfer(owner(), luckyFirst, idTracker, 1);
+		_mint(luckyFirst, idTracker++);
 	}
 
 	/**
-   @notice returns the Toobins to the (contract) owner's wallet if it gets stuck
-	@dev charm is minted automatically in _afterTokenTransfer hook
+   @notice Returns the Toobins to the (contract) owner's wallet if it gets stuck
+	@dev Charm is minted automatically in _afterTokenTransfer hook
    */
 	function yoink() public onlyOwner {
 		_transfer(ownerOf(0), msg.sender, 0);
@@ -52,15 +52,16 @@ contract Toobins is ERC721, Ownable, BaseTokenURI {
 	}
 
 	/**
-   @notice primary transfer function
-	@dev (doesn't require `from` or `tokenId`)
+   @notice Convenience Transfer function
+	@dev (Doesn't require `from` or `tokenId`)
    */
 	function pass(address to) public {
 		safeTransferFrom(msg.sender, to, 0);
 	}
 
 	/**
-	@dev use hooks instead of overriding ERC-721 transfer functions
+	@notice This is where the transfer checks happen
+	@dev Using hooks instead of overriding ERC-721 transfer functions
    */
 	function _beforeTokenTransfer(
 		address from,
@@ -81,13 +82,15 @@ contract Toobins is ERC721, Ownable, BaseTokenURI {
 			'Charms are address-bound and cannot be transferred'
 		);
 		require(balanceOf(to) == 0, 'This address already received Toobins');
-		// TODO: add check for Toobins Charms in the Vault
 		require(
 			_hasMoonbird(to) || _checkForMoonbirdsVault(to) != address(0),
 			'Toobins can only be transferred to an address with a Moonbird'
 		);
 	}
 
+	/**
+	@notice This is where the mint happens after a transfer
+	*/
 	function _afterTokenTransfer(
 		address from,
 		address,
@@ -95,25 +98,11 @@ contract Toobins is ERC721, Ownable, BaseTokenURI {
 		uint256 batchSize
 	) internal virtual override {
 		assert(batchSize == 1);
-		if (from == address(0)) {
-			// mints have no side effects and Charms can't be transferred so we wouldn't be here
-			return;
-		}
 
-		// @review This is to keep with the functionality as currently implemented, for demonstration purposes,
-		// but see other comments around expected behaviour.
-		address mintTo = from;
-		if (!_hasMoonbird(mintTo)) {
-			mintTo = _checkForMoonbirdsVault(from);
-		}
-		if (mintTo != address(0)) {
-			_mint(mintTo, idTracker++); // do NOT use safeMint as this allowed the Wriggler exploit
+		if (from != address(0)) {
+			_mint(from, idTracker++); // do NOT use safeMint as this allowed the Wriggler exploit
 		}
 	}
-
-	//
-	// transfer checks with delegation
-	//
 
 	function _hasMoonbird(address owner) internal view returns (bool) {
 		return IERC721(moonbirds).balanceOf(owner) > 0;
@@ -135,7 +124,22 @@ contract Toobins is ERC721, Ownable, BaseTokenURI {
 		for (uint i = 0; i < delegateInfos.length; i++) {
 			IDelegationRegistry.DelegationInfo memory info = delegateInfos[i];
 
-			// TODO: filter delegations
+			// Filter out delegations that are not relevant to Moonbirds
+			if (info.type_ == IDelegationRegistry.DelegationType.NONE) {
+				continue;
+			}
+			if (
+				info.type_ == IDelegationRegistry.DelegationType.TOKEN &&
+				info.contract_ != moonbirds
+			) {
+				continue;
+			}
+			if (
+				info.type_ == IDelegationRegistry.DelegationType.CONTRACT &&
+				info.contract_ != moonbirds
+			) {
+				continue;
+			}
 
 			if (_hasMoonbird(info.vault)) {
 				return info.vault;
