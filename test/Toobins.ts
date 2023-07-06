@@ -189,10 +189,6 @@ describe('Toobins', () => {
 					0,
 				),
 			).to.be.revertedWith('ERC721: address zero is not a valid owner')
-
-			await expect(
-				toobins.connect(other1).canTransfer(AddressZero, 0),
-			).to.be.revertedWith('ERC721: address zero is not a valid owner')
 		})
 
 		it('should prevent transfers from non-holders', async () => {
@@ -207,12 +203,6 @@ describe('Toobins', () => {
 			).to.be.revertedWith(
 				'Toobins can only be transferred to an address with a Moonbird',
 			)
-
-			await expect(
-				toobins.connect(other1).canTransfer(other5.address, 0),
-			).to.be.revertedWith(
-				'Toobins can only be transferred to an address with a Moonbird',
-			)
 		})
 
 		it('should transfer the Toobin to a valid address', async () => {
@@ -220,10 +210,6 @@ describe('Toobins', () => {
 			expect(o1_balanceBefore).to.eq(1)
 			const o2_balanceBefore = await toobins.balanceOf(other2.address)
 			expect(o2_balanceBefore).to.eq(0)
-
-			expect(
-				await toobins.connect(other1).canTransfer(other2.address, 0),
-			).to.eq(true)
 
 			await toobins.connect(other1).pass(other2.address)
 
@@ -240,10 +226,6 @@ describe('Toobins', () => {
 			const oDH_balanceBefore = await toobins.balanceOf(otherDeleHot1.address)
 			expect(oDH_balanceBefore).to.eq(0)
 
-			expect(
-				await toobins.connect(other2).canTransfer(otherDeleHot1.address, 0),
-			).to.eq(true)
-
 			await toobins
 				.connect(other2)
 				['safeTransferFrom(address,address,uint256)'](
@@ -251,8 +233,6 @@ describe('Toobins', () => {
 					otherDeleHot1.address,
 					0,
 				)
-
-			// pass(otherDeleHot.address)
 
 			const o2_balanceAfter = await toobins.balanceOf(other2.address)
 			expect(o2_balanceAfter).to.eq(1)
@@ -264,12 +244,6 @@ describe('Toobins', () => {
 		it('should let a delegate transfer the Toobin to a delegate', async () => {
 			expect(await toobins.balanceOf(otherDeleHot1.address)).to.eq(1)
 			expect(await toobins.balanceOf(otherDeleHot2.address)).to.eq(0)
-
-			expect(
-				await toobins
-					.connect(otherDeleHot1)
-					.canTransfer(otherDeleHot2.address, 0),
-			).to.eq(true)
 
 			await toobins
 				.connect(otherDeleHot1)
@@ -288,10 +262,6 @@ describe('Toobins', () => {
 			expect(await toobins.balanceOf(otherDeleHot2.address)).to.eq(1)
 			expect(await toobins.balanceOf(other4.address)).to.eq(0)
 
-			expect(
-				await toobins.connect(otherDeleHot2).canTransfer(other4.address, 0),
-			).to.eq(true)
-
 			await toobins
 				.connect(otherDeleHot2)
 				['safeTransferFrom(address,address,uint256)'](
@@ -309,19 +279,11 @@ describe('Toobins', () => {
 			await expect(
 				toobins.connect(other2).pass(other1.address),
 			).to.be.revertedWith('This address already receieved Toobins')
-
-			await expect(
-				toobins.connect(other2).canTransfer(other1.address, 0),
-			).to.be.revertedWith('This address already receieved Toobins')
 		})
 
 		it('should prevents transfers of souldbound Charms', async () => {
 			await expect(
 				toobins.connect(other1).transferFrom(other2.address, other3.address, 1),
-			).to.be.revertedWith('Charms are soulbound and cannot be transferred')
-
-			await expect(
-				toobins.connect(other1).canTransfer(other3.address, 1),
 			).to.be.revertedWith('Charms are soulbound and cannot be transferred')
 		})
 	})
@@ -361,8 +323,6 @@ describe('Toobins', () => {
 		it('should not leave behind a Charm for the owner', async () => {
 			const owner_balanceBefore = await toobins.balanceOf(owner.address)
 			expect(owner_balanceBefore).to.eq(1)
-
-			expect(await toobins.canTransfer(other3.address, 0)).to.eq(true)
 
 			await toobins.pass(other3.address)
 
