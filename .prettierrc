@@ -14,7 +14,7 @@
 				"useTabs": true,
 				"singleQuote": true,
 				"bracketSpacing": false,
-				"explicitTypes": "preserve"
+				"explicitTypes": "always"
 			}
 		}
 	]
