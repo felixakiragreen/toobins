@@ -23,7 +23,7 @@
 	},
 	"devDependencies": {
 		"@defi-wonderland/smock": "^2.3.4",
-		"@divergencetech/ethier": "^0.55.0",
+		"@divergencetech/ethier": "0.49.0",
 		"@ethersproject/abi": "^5.7.0",
 		"@ethersproject/providers": "^5.7.2",
 		"@nomicfoundation/hardhat-chai-matchers": "^1.0.6",
