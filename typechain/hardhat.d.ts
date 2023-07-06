@@ -13,6 +13,10 @@ import * as Contracts from ".";
 declare module "hardhat/types/runtime" {
   interface HardhatEthersHelpers extends HardhatEthersHelpersBase {
     getContractFactory(
+      name: "BaseTokenURI",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.BaseTokenURI__factory>;
+    getContractFactory(
       name: "Ownable",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Ownable__factory>;
@@ -61,10 +65,19 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Toobins__factory>;
     getContractFactory(
+      name: "Toobins",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.Toobins__factory>;
+    getContractFactory(
       name: "ToobinsWithExploitableYoink",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.ToobinsWithExploitableYoink__factory>;
 
+    getContractAt(
+      name: "BaseTokenURI",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.BaseTokenURI>;
     getContractAt(
       name: "Ownable",
       address: string,
@@ -120,6 +133,11 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.MockMoonbirds>;
+    getContractAt(
+      name: "Toobins",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.Toobins>;
     getContractAt(
       name: "Toobins",
       address: string,
