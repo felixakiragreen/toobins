@@ -65,10 +65,6 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Toobins__factory>;
     getContractFactory(
-      name: "Toobins",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.Toobins__factory>;
-    getContractFactory(
       name: "ToobinsWithExploitableYoink",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.ToobinsWithExploitableYoink__factory>;
@@ -133,11 +129,6 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.MockMoonbirds>;
-    getContractAt(
-      name: "Toobins",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.Toobins>;
     getContractAt(
       name: "Toobins",
       address: string,
