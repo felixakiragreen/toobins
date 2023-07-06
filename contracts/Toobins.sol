@@ -66,7 +66,7 @@ contract Toobins is Ownable, ERC721 {
 		transferFrom(msg.sender, to, 0);
 	}
 
-	// overriding ERC-721 transfer functions
+	// instead of overriding ERC-721 we can use hooks
 
 	function _beforeTokenTransfer(
 		address from,
@@ -74,7 +74,9 @@ contract Toobins is Ownable, ERC721 {
 		uint256 tokenId,
 		uint256 batchSize
 	) internal virtual override {
-		assert(batchSize == 1);
+		assert(batchSize == 1); // TODO: check if assert is necessary
+		// since OpenZeppelin always calls with 1
+
 		if (from == address(0) || to == owner()) {
 			// mints are always allowed and we don't stop the owner from yoinking
 			return;
