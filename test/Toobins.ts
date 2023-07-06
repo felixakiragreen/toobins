@@ -220,6 +220,20 @@ describe('Toobins', () => {
 			expect(o2_balanceAfter).to.eq(1)
 		})
 
+		it('should prevent transfers to addresses that already had the Toobin', async () => {
+			await expect(
+				toobins.connect(other2).pass(other1.address),
+			).to.be.revertedWith('This address already receieved Toobins')
+
+			// TODO: also need to test for delegates
+		})
+
+		it('should prevent transfers of souldbound Charms', async () => {
+			await expect(
+				toobins.connect(other1).transferFrom(other1.address, other3.address, 1),
+			).to.be.revertedWith('Charms are soulbound and cannot be transferred')
+		})
+
 		it('should transfer the Toobins to an address with a Moonbird delegate', async () => {
 			const o2_balanceBefore = await toobins.balanceOf(other2.address)
 			expect(o2_balanceBefore).to.eq(1)
@@ -273,18 +287,6 @@ describe('Toobins', () => {
 			expect(await toobins.balanceOf(otherDeleHot2.address)).to.eq(0) // should no longer has Toobin
 			expect(await toobins.balanceOf(otherDeleCold2.address)).to.eq(1) // should have a Charm
 			expect(await toobins.balanceOf(other4.address)).to.eq(1) // has Toobin now
-		})
-
-		it('should prevent transfers to addresses that already had the Toobin', async () => {
-			await expect(
-				toobins.connect(other2).pass(other1.address),
-			).to.be.revertedWith('This address already receieved Toobins')
-		})
-
-		it('should prevents transfers of souldbound Charms', async () => {
-			await expect(
-				toobins.connect(other1).transferFrom(other2.address, other3.address, 1),
-			).to.be.revertedWith('Charms are soulbound and cannot be transferred')
 		})
 	})
 
