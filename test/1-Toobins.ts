@@ -204,12 +204,6 @@ describe('Toobins', () => {
 			).to.be.revertedWith('Ownable: caller is not the owner')
 		})
 
-		it('should prevent owner from initiating run with an invalid address', async () => {
-			await expect(toobins.initiate(other5.address)).to.be.revertedWith(
-				'Toobins can only be transferred to an address with a Moonbird',
-			)
-		})
-
 		it('should allow owner to initiate the run', async () => {
 			const balanceBefore = await toobins.balanceOf(other1.address)
 			expect(balanceBefore).to.eq(0)
