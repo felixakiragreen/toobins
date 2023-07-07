@@ -22,7 +22,18 @@ export async function getArgs(contractName: string): Promise<any[]> {
 			logger.error('Moonbirds address not found')
 		}
 
-		// 2 - metadata / base token URI
+		// 2 - DELEGATION REGISTRY address
+		const delegationAddress = await getAddress(
+			'DelegationRegistry',
+			network.name,
+		)
+		if (delegationAddress) {
+			args.push(delegationAddress)
+		} else {
+			logger.error('DelegationRegistry address not found')
+		}
+
+		// 3 - metadata / base token URI
 		// TODO: update this to the real metadata URI
 
 		if (network.name === 'mainnet') {
@@ -34,17 +45,6 @@ export async function getArgs(contractName: string): Promise<any[]> {
 			const metadata = 'https://mock-toobins.shuttleapp.rs/'
 
 			args.push(metadata)
-		}
-
-		// 3 - DELEGATION REGISTRY address
-		const delegationAddress = await getAddress(
-			'DelegationRegistry',
-			network.name,
-		)
-		if (delegationAddress) {
-			args.push(delegationAddress)
-		} else {
-			logger.error('DelegationRegistry address not found')
 		}
 	} else {
 		logger.info('No constructor arguments provided')
