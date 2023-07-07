@@ -41,7 +41,7 @@ I use alchemy API to deploy but you can configure your own provider in `hardhat.
 
 ### Transaction Log (2023-06-25)
 
-[OpenSea collection](https://testnets.opensea.io/collection/toobins). / [Etherscan Contract](https://goerli.etherscan.io/address/0x0a239365bbab8dbe0df035245b905aad37b55f16)
+[OpenSea collection](https://testnets.opensea.io/collection/toobins) / [Etherscan Contract](https://goerli.etherscan.io/address/0x0a239365bbab8dbe0df035245b905aad37b55f16)
 
 1. primary → [deployed mock moonbirds to goerli](https://goerli.etherscan.io/tx/0x1b89ba05b526efe806943fd3f547f39c67236838d12fff31e2a274f0cebc0cc2)
 2. secondary → [minted moonbird](https://goerli.etherscan.io/tx/0xc2e3b12b6fc96f2e9be6e465a16116638435e5b7dec79b67ea1d271f0610870b)
