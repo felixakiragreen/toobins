@@ -9,8 +9,9 @@ const ALCHEMY_PROD_API_KEY = process.env.ALCHEMY_PROD_API_KEY || ''
 const ALCHEMY_TEST_API_KEY = process.env.ALCHEMY_TEST_API_KEY || ''
 const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY
 
-const TESTNET_ADDRESS = process.env.TESTNET_ADDRESS || ''
-const TESTNET_PRIVATE_KEY = process.env.TESTNET_PRIVATE_KEY || ''
+const TESTNET_PRIMARY_ADDRESS = process.env.TESTNET_PRIMARY_ADDRESS || ''
+const TESTNET_PRIMARY_PRIVATE_KEY =
+	process.env.TESTNET_PRIMARY_PRIVATE_KEY || ''
 const TESTNET_SECONDARY_PRIVATE_KEY =
 	process.env.TESTNET_SECONDARY_PRIVATE_KEY || ''
 
@@ -41,8 +42,8 @@ const config: HardhatUserConfig = {
 		},
 		goerli: {
 			url: `https://eth-goerli.g.alchemy.com/v2/${ALCHEMY_TEST_API_KEY}`,
-			accounts: [TESTNET_PRIVATE_KEY, TESTNET_SECONDARY_PRIVATE_KEY],
-			from: TESTNET_ADDRESS,
+			accounts: [TESTNET_PRIMARY_PRIVATE_KEY, TESTNET_SECONDARY_PRIVATE_KEY],
+			from: TESTNET_PRIMARY_ADDRESS,
 		},
 		mainnet: {
 			url: `https://eth-mainnet.g.alchemy.com/v2/${ALCHEMY_PROD_API_KEY}`,
