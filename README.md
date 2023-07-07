@@ -28,9 +28,7 @@ and the constructor arguments for metadata in `scripts/run/use/args.ts`.
 
 I use alchemy API to deploy but you can configure your own provider in `hardhat.config.ts`.
 
-## Testnet Deploy
-
-This is just a log of what I did to make this [OpenSea collection](https://testnets.opensea.io/collection/toobins).
+## Testnet Deploys
 
 ### Addresses
 
@@ -42,6 +40,8 @@ This is just a log of what I did to make this [OpenSea collection](https://testn
 - senary → `0x96BCC28FD42835103d2902BDae50C9B3d13F5598`
 
 ### Transaction Log (2023-06-25)
+
+[OpenSea collection](https://testnets.opensea.io/collection/toobins).
 
 1. primary → [deployed mock moonbirds to goerli](https://goerli.etherscan.io/tx/0x1b89ba05b526efe806943fd3f547f39c67236838d12fff31e2a274f0cebc0cc2)
 2. secondary → [minted moonbird](https://goerli.etherscan.io/tx/0xc2e3b12b6fc96f2e9be6e465a16116638435e5b7dec79b67ea1d271f0610870b)
@@ -55,8 +55,12 @@ This is just a log of what I did to make this [OpenSea collection](https://testn
 
 ### Transaction Log (2023-07-07)
 
-1. primary → [deployed toobins]()
-2. primary → [initiated with quartenary]()
-3. quarternary → [pass to tertiary]()
-4. tertiary → [transfer to quinary]()
-5. quinary → [attempt to transfer to senary, reverted as expected because no moonbird]()
+[OpenSea collection](https://testnets.opensea.io/collection/toobins-1).
+
+1. primary → [deployed toobins](https://goerli.etherscan.io/tx/0x8c84b4068163eaaccc948deed20b7ad77440be9cef95adf770d9eda36cfc7e7b)
+2. primary → [initiated with quartenary](https://goerli.etherscan.io/tx/0xd617828c4d4c6b034611766c24adf5728819b4e18b481e2c27ee42a8faf79b43)
+3. quarternary → [pass to tertiary](https://goerli.etherscan.io/tx/0xbdd86fb18fcb15fd3e230fd520c88adc71d855f2801cec267828168a6892019e)
+4. tertiary → [transfer to quinary](https://goerli.etherscan.io/tx/0x8d650700ef41586633973230a6a440edefa1e4e6c1e31643136d0c8281c3fe34)
+5. quinary → [attempt to pass to senary, reverted as expected because no moonbird](https://goerli.etherscan.io/tx/0x165a5577c2309c781f633a0a7efdc00fdaf51852de362f1df0d3223df21c1bc7)
+6. primary → [yoinked to conclude run](https://goerli.etherscan.io/tx/0xcc4bbf52ecd11341f5dcfb24e6aa5b9761beb75bf2b2ab469ef34d04034bb035)
+7. quinary → [attempt to transfer Toobins, reverted, showing fix for exploit 1](https://goerli.etherscan.io/tx/0x9b2df6b0ee764b433c4d700b32cf604c8e1d69adba2cd74fea7ab5b285d7e0f2)
