@@ -41,7 +41,7 @@ I use alchemy API to deploy but you can configure your own provider in `hardhat.
 
 ### Transaction Log (2023-06-25)
 
-[OpenSea collection](https://testnets.opensea.io/collection/toobins) / [Etherscan Contract](https://goerli.etherscan.io/address/0x0a239365bbab8dbe0df035245b905aad37b55f16)
+[OpenSea collection](https://testnets.opensea.io/collection/toobins) / [Etherscan contract](https://goerli.etherscan.io/address/0x0a239365bbab8dbe0df035245b905aad37b55f16)
 
 1. primary → [deployed mock moonbirds to goerli](https://goerli.etherscan.io/tx/0x1b89ba05b526efe806943fd3f547f39c67236838d12fff31e2a274f0cebc0cc2)
 2. secondary → [minted moonbird](https://goerli.etherscan.io/tx/0xc2e3b12b6fc96f2e9be6e465a16116638435e5b7dec79b67ea1d271f0610870b)
@@ -55,7 +55,7 @@ I use alchemy API to deploy but you can configure your own provider in `hardhat.
 
 ### Transaction Log (2023-07-07)
 
-[OpenSea collection](https://testnets.opensea.io/collection/toobins-1) / [Etherscan Contract](https://goerli.etherscan.io/address/0xf71c3979e16f8b1ab8f2db03693c4383d636abba)
+[OpenSea collection](https://testnets.opensea.io/collection/toobins-1) / [Etherscan contract](https://goerli.etherscan.io/address/0xf71c3979e16f8b1ab8f2db03693c4383d636abba)
 
 1. primary → [deployed toobins](https://goerli.etherscan.io/tx/0x8c84b4068163eaaccc948deed20b7ad77440be9cef95adf770d9eda36cfc7e7b)
 2. primary → [initiated with quartenary](https://goerli.etherscan.io/tx/0xd617828c4d4c6b034611766c24adf5728819b4e18b481e2c27ee42a8faf79b43)
