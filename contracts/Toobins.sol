@@ -25,13 +25,11 @@ contract Toobins is ERC721, Ownable, BaseTokenURI {
 	uint256 public idTracker;
 
 	/**
-   @notice Calling `_beforeTokenTransfer` from owner preserves all checks,
-	but this can be removed to skip them.
+   @notice Does not enforce any transfer checks.
    */
 	function initiate(address luckyFirst) public onlyOwner {
 		assert(idTracker == 0);
 
-		_beforeTokenTransfer(msg.sender, luckyFirst, idTracker, 1);
 		_mint(luckyFirst, idTracker++);
 	}
 
