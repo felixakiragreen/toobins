@@ -40,7 +40,7 @@ This is just a log of what I did to make this [OpenSea collection](https://testn
 - quartenary → `0x61fA6bF463Eb079F52932A7ED5bA0e63505D8Ed5`
 - quinary → `0x992c983C235AffA30372ee6759319f89989ad4Db`
 
-### Transaction Log
+### Transaction Log (2023-06-25)
 
 1. primary → [deployed mock moonbirds to goerli](https://goerli.etherscan.io/tx/0x1b89ba05b526efe806943fd3f547f39c67236838d12fff31e2a274f0cebc0cc2)
 2. secondary → [minted moonbird](https://goerli.etherscan.io/tx/0xc2e3b12b6fc96f2e9be6e465a16116638435e5b7dec79b67ea1d271f0610870b)
@@ -51,3 +51,5 @@ This is just a log of what I did to make this [OpenSea collection](https://testn
 7. tertiary → [attempt to transfer to quinary, reverted as expected because no moonbird](https://goerli.etherscan.io/tx/0xe62bd09c1e674e3250fa3108a4a25d94f635603e5d640d888bbea3302447eba6)
 8. quinary → [mint moonbird](https://goerli.etherscan.io/tx/0x5445176be3f77d50a6d46e57a00725e62cc17b15d841cbab91455baba770cfff)
 9. tertiary → [transfer to quinary](https://goerli.etherscan.io/tx/0x68af29e800d29df3f3d3dd48ff3e1761d77106d814bca2476bac0d768524ffe6)
+
+### Transaction Log (2023-07-07)
