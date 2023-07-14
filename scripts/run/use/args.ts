@@ -34,13 +34,11 @@ export async function getArgs(contractName: string): Promise<any[]> {
 		}
 
 		// 3 - metadata / base token URI
-		// TODO: update this to the real metadata URI
 
 		if (network.name === 'mainnet') {
-			logger.error('Constructor argument for `baseTokenURI` is not configured')
-			throw new Error(
-				'Please configure `baseTokenURI` in `scripts/run/use/args.ts` and remove this error.',
-			)
+			const metadata = 'https://metadata.proof.xyz/mythics/toobins/'
+
+			args.push(metadata)
 		} else if (network.name === 'goerli') {
 			const metadata = 'https://mock-toobins.shuttleapp.rs/'
 
